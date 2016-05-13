@@ -1,0 +1,23 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}
+\contentsline {section}{\numberline {1.1}Current State of The Art}{1}
+\contentsline {section}{\numberline {1.2}Goals}{1}
+\contentsline {chapter}{\numberline {2}Theory and Planning}{2}
+\contentsline {section}{\numberline {2.1}Principle of Operation}{2}
+\contentsline {subsection}{\numberline {2.1.1}Persistence of Vision}{2}
+\contentsline {subsection}{\numberline {2.1.2}Exploiting Persistence of Vision}{2}
+\contentsline {section}{\numberline {2.2}Specifications}{2}
+\contentsline {section}{\numberline {2.3}Components}{3}
+\contentsline {subsection}{\numberline {2.3.1}Control}{3}
+\contentsline {subsection}{\numberline {2.3.2}Data Transmission}{3}
+\contentsline {subsection}{\numberline {2.3.3}LED drivers}{4}
+\contentsline {subsection}{\numberline {2.3.4}LEDs}{4}
+\contentsline {subsection}{\numberline {2.3.5}Capacitors}{4}
+\contentsline {subsection}{\numberline {2.3.6}Motor}{5}
+\contentsline {subsection}{\numberline {2.3.7}Power Transmission}{5}
+\contentsline {section}{\numberline {2.4}Circuit Diagram}{6}
+\contentsline {subsection}{\numberline {2.4.1}Data Interface}{6}
+\contentsline {subsection}{\numberline {2.4.2}LED Drivers}{6}
+\contentsline {subsection}{\numberline {2.4.3}LEDs}{7}
+\contentsline {section}{\numberline {2.5}PCB Design}{7}
+\contentsline {subsection}{\numberline {2.5.1}General Remarks}{7}
+\contentsline {subsection}{\numberline {2.5.2}Space-saving measures}{8}

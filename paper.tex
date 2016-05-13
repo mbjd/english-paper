@@ -390,9 +390,9 @@ In practice, however, this current is not reached since the vast majority of pix
 switched off when displaying a typical 3D image. 
 
 Because two pieces of copper sheet rubbing against each other aren't the most reliable electrical 
-connection, I used a \SI{2200}{\micro\farad} electrolytic capacitor to smooth out the supply voltage. Even with it,
-I found that the pressure between the two copper conductors had to be quite high for them to form
-a good contact.
+connection, I used a \SI{2200}{\micro\farad} electrolytic capacitor to smooth out the supply 
+voltage. Even with it, I found that the pressure between the two copper conductors had to be quite
+high for them to form a good contact.
 
 
 \newpage
@@ -481,32 +481,72 @@ green = vias, grey = silkscreen.}
 
 The defining factor for the board layout was the pin layout of the LED drivers. The outputs are all
 at the bottom of the chip, while the data interface is at the top. This led me to the layout I have
-now: the LEDs are in a row at the bottom of the board where they can be directly connected to the driver 
-outputs on the upper copper layer. The control lines are is routed on the back side of the board
-behind the chips, with vias going to the front side to connect to each chip. The data lines go 
-straight from one chip to the next one on the upper copper layer, with the last output going back
-to the board's data interface on the back side. The resistors are placed on the right side of their
-respective driver IC, jumping across the data traces. 
+now: the LEDs are in a row at the bottom of the board where they can be directly connected to the 
+driver outputs on the upper copper layer. The control lines are is routed on the back side of the 
+board behind the chips, with vias going to the front side to connect to each chip. The data lines 
+go straight from one chip to the next one on the upper copper layer, with the last output going 
+back to the board's data interface on the back side. The resistors are placed on the right side of 
+their respective driver IC, jumping across the data traces. 
 
-The supply lines are placed beneath the row of LEDs. Had I placed the supply on the upper edge of the 
-board, I still would've had to connect all the 16 anodes to \vdd. The driver chips, on the other hand, 
-only need one connection to \vdd and GND each, so by placing the supply lines at the bottom of the board 
-I have less traces running across the board vertically.
+The supply lines are placed beneath the row of LEDs. Had I placed the supply on the upper edge of 
+the board, I still would've had to connect all the 16 anodes to \vdd. The driver chips, on the 
+other hand, only need one connection to \vdd and GND each, so by placing the supply lines at the 
+bottom of the board I have less traces running across the board vertically.
 
-From a layout perspective, it would've made sense to put the GND line at the top of the board, since the
-chips need one connection to that trace each, while the LEDs don't. However, I opted to put both supply
-lines right above each other to reduce electromagnetic interference. If all the LEDs are switched on
-suddenly and a lot of current starts to flow, a magnetic field builds up quickly around the supply traces.
-This could induce bothering or even dangerous currents in the surrounding electronics. By having the two
-supply lines close to each other, their magnetic fields largely cancel each other out. Another advantage
-of having the supply at the bottom is that the distance to the delicate chips are a bit farther away.
+From a layout perspective, it would've made sense to put the GND line at the top of the board, 
+since the chips need one connection to that trace each, while the LEDs don't. However, I opted to 
+put both supply lines right above each other to reduce electromagnetic interference. If all the 
+LEDs are switched on suddenly and a lot of current starts to flow, a magnetic field builds up 
+quickly around the supply traces. This could induce bothering or even dangerous currents in the 
+surrounding electronics. By having the two supply lines close to each other, their magnetic fields 
+largely cancel each other out. Another advantage of having the supply at the bottom is that the 
+distance to the delicate chips are a bit farther away.
 
 
 \subsection{Space-saving measures}
 
-In order for the production to be as cheap as possible as well as to minimise the rotating mass, I tried
-to make the boards as small as possible. Ultimately, I managed to bring the size down to 
-\SI{73}{\milli\meter} by \SI{21}{\milli\meter}
+In order for the production to be as cheap as possible as well as to minimise the rotating mass, I 
+tried to make the boards as small as possible. Ultimately, I managed to bring the size down to 
+\SI{73}{\milli\meter} by \SI{21}{\milli\meter}.
+
+In order to achieve this, but also to avoid large gaps between the pixels, I placed the LEDs as 
+close as possible to each other. The datasheet claims a width of \SI{2.8 +- 0.2}{\milli\meter}, 
+so I decided to place the LEDs at \SI{3}{\milli\metre} increments. On a grid of \SI{12.5}{mil}, 
+the next larger distance is \SI{125}{mil}, which is equal to \SI{3.175}{mm}.
+
+The connections to the cathodes of the red LED needs to pass by the other two cathodes, since 
+they're located on the lower side of the LED package. Because the LEDs are so close to each other, 
+the only option was to use the lower copper layer. The only place to go back to the upper copper 
+layer was right beneath the driver chips.
+
+Initially, I had placed the capacitors right above the ICs. However, I could save a small bit of
+vertical board size by placing them at an offset to the right. That way I could push them down 
+until where the pins begin, which is a bit further down than the edge of the chip itself.
+
+
+\subsection{Thermal Considerations}
+
+A positive side effect of placing some vias beneath the chip is their thermal conductivity. That
+way, the chips' waste heat can be dissipated more effectively. The maximum power output of the 
+chips --- when all the attached LEDs are turned on --- is as follows:
+
+\begin{ownmath}
+\textrm{P\textsubscript{MAX}} = (\SI{5}{\volt} - \textrm{V\textsubscript{F}}) * 
+\SI{20.6}{\milli\ampere\per output} * \SI{16}{outputs} = \SI{867.9}{\milli\watt}
+\end{ownmath}
+
+V\textsubscript{F} is different depending on the colour of the LED, so I just used the average
+value, which is \SI{2.633}{\volt}. The actual values are \SI{1.9}{\volt} for red and \SI{3}{\volt}
+for green and blue.
+
+A power output of almost a watt is not to be underestimated, and tests have shown that that the
+boards do get quite hot when operated at full power. In reality, however, the situation is much
+less severe because the LEDs are typically turned on only during a fraction of the rotation.
+Furthermore, the quick rotation results in excellent air circulation, which aids the dissipation
+of heat.
+
+
+
 
 
 

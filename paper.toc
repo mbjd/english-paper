@@ -21,3 +21,4 @@
 \contentsline {section}{\numberline {2.5}PCB Design}{7}
 \contentsline {subsection}{\numberline {2.5.1}General Remarks}{7}
 \contentsline {subsection}{\numberline {2.5.2}Space-saving measures}{8}
+\contentsline {subsection}{\numberline {2.5.3}Thermal Considerations}{8}

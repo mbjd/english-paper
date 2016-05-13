@@ -159,11 +159,11 @@ display and to document the process of doing so. The necessary steps are (roughl
 \begin{itemize}
 	\item Understand and explain how and why such a display can work in principle
 	\item Come up with realistic technical specifications, founded on the previously outlined 
-	theory  
+theory  
 	\item Select parts and build the device according to the specifications
 	\item Write a program that makes the device display a 3D image
 	\item Draw conclusions: Did I achieve my goals? What could have been done better? 
-	How can the project be further improved?
+How can the project be further improved?
 \end{itemize}
 
 
@@ -214,10 +214,10 @@ image.
 
 \begin{itemize}
 
-\item Resolution of 16 * 100 * 10 pixels (radius * circumference * height)
-\item Each pixel consists of an RGB LED
-\item Colour depth of 3 bit per pixel, or one bit per LED
-\item Rotational frequency of at least 30 Hz, or as fast as it needs to be in order to not flicker
+	\item Resolution of 16 * 100 * 10 pixels (radius * circumference * height)
+	\item Each pixel consists of an RGB LED
+	\item Colour depth of 3 bit per pixel, or one bit per LED
+	\item Rotational frequency of at least 30 Hz, or as fast as it needs to be in order to not flicker
 
 \end{itemize}
 
@@ -251,7 +251,7 @@ shortcomings:
 
 \begin{itemize}
 
-\item Controlled using \iZc  instead of SPI
+	\item Controlled using \iZc  instead of SPI
 
 Because \iZc uses pullup resistors instead of a push-pull drive, it takes a little moment for the
 logic level to return to its normal state. In order to ensure correct data transmission, it is 
@@ -270,7 +270,7 @@ This means that I'd need at least 5 parallel \iZc lines to control all the LEDs 
 depth. Because each Teensy only has two of them, I'd need three Teensy boards, which would be
 possible but very cumbersome.
 
-\item Insufficient PWM frequency
+	\item Insufficient PWM frequency
 
 If the colour depth is more than one bit, the LEDs will have to be dimmed using PWM. Normally, a
 rather low frequency of a few hundred to a few thousand Hz is sufficient as a PWM frequency, and
@@ -329,15 +329,15 @@ My requirements were the following:
 
 \begin{itemize}
 
-\item Colours: Red, green and blue
-\item Current: 20 mA or more. Because the LEDs are within one pixel only $\frac{1}{100}$ of the
+	\item Colours: Red, green and blue
+	\item Current: 20 mA or more. Because the LEDs are within one pixel only $\frac{1}{100}$ of the
 time, they are essentially pulse width modulated, reducing their effective brightness. In order to
 still see the image clearly without darkening the room, they have to be bright enough.
-\item Mounting type: Surface mount, so that I can route traces past the LEDs on the other side 
+	\item Mounting type: Surface mount, so that I can route traces past the LEDs on the other side 
 of the PCB
-\item Size: At most 5 * 5 mm, preferably smaller, but still large enough to be able to solder them
+	\item Size: At most 5 * 5 mm, preferably smaller, but still large enough to be able to solder them
 by hand
-\item Diffused lens, so the colours mix well even when viewing the LED directly instead of using
+	\item Diffused lens, so the colours mix well even when viewing the LED directly instead of using
 it for illumination.
 
 \end{itemize}

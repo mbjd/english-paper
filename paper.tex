@@ -1,7 +1,7 @@
 \documentclass[a4paper, 11pt, titlepage]{report}
 
 \usepackage[margin=2.0cm]{geometry}
- 
+
 \usepackage{xspace}
 \def \iZc {I\textsuperscript{2}C\xspace}
 \def \vdd {V\textsubscript{DD}}
@@ -39,7 +39,7 @@
 
 \usepackage{siunitx}
 
-% To have text wrapped around images 
+% To have text wrapped around images
 \usepackage{wrapfig}
 
 % Some parameters for wrapfig
@@ -81,24 +81,24 @@
 
 \section*{Motivation}
 
-For as long as I can remember, I've been fascinated by all kinds of technology. 
+For as long as I can remember, I've been fascinated by all kinds of technology.
 It was clear to me that my final thesis would be a practical one in the field of engineering.
 However, I didn't have anything specific in mind for quite some time.
 
-One day, I stumbled upon a project report on the internet about a so-called persistence of 
-vision display. It was a simple row of LEDs, driven by a microcontroller, and mounted on an 
-electric motor. The contraption was (and presumably still is) able to draw images into the 
-air by precisely controlling the row of LEDs. Fascinated by this, I did some research and 
-found that a plethora of similar projects exists, some even with detailed instructions on how 
+One day, I stumbled upon a project report on the internet about a so-called persistence of
+vision display. It was a simple row of LEDs, driven by a microcontroller, and mounted on an
+electric motor. The contraption was (and presumably still is) able to draw images into the
+air by precisely controlling the row of LEDs. Fascinated by this, I did some research and
+found that a plethora of similar projects exists, some even with detailed instructions on how
 to build the device in question.
 
-I had the idea of building several rows of LEDs and arranging them on top of each other. 
+I had the idea of building several rows of LEDs and arranging them on top of each other.
 That way, I could display several two-dimensional bitmap images above another, resulting in a
 three-dimensional image.
 
-Having had no previsous experience in the field of electronics, it seemed a bit daunting to 
+Having had no previsous experience in the field of electronics, it seemed a bit daunting to
 build a 3D display. I could, however, motivate myself to attempt it anyway by telling myself
-that the project wouldn't be much more complex than all of the 2D versions out there (which 
+that the project wouldn't be much more complex than all of the 2D versions out there (which
 turned out to be not very far from the truth).
 
 
@@ -123,7 +123,7 @@ Dettling, and confirm that all external sources of information are cited correct
 
 \vspace{10mm}
 \noindent Location and Date: \hspace{0.35\textwidth} Signed:\\
-\rule[3mm]{\textwidth}{0.5pt} 
+\rule[3mm]{\textwidth}{0.5pt}
 
 
 
@@ -158,11 +158,11 @@ display and to document the process of doing so. The necessary steps are (roughl
 
 \begin{itemize}
 	\item Understand and explain how and why such a display can work in principle
-	\item Come up with realistic technical specifications, founded on the previously outlined 
-theory  
+	\item Come up with realistic technical specifications, founded on the previously outlined
+theory
 	\item Select parts and build the device according to the specifications
 	\item Write a program that makes the device display a 3D image
-	\item Draw conclusions: Did I achieve my goals? What could have been done better? 
+	\item Draw conclusions: Did I achieve my goals? What could have been done better?
 How can the project be further improved?
 \end{itemize}
 
@@ -178,21 +178,21 @@ How can the project be further improved?
 
 Persistence of Vision refers to the optical illusion that results whenever the image we look
 at quickly changes. In such situations, we don't immediately see the new image, instead we
-continue seeing the old image for a short timespan after it has vanished. If wikipedia is to 
-be believed, this timespan is about $\frac{1}{25}$ of a second, but of course it is going to 
+continue seeing the old image for a short timespan after it has vanished. If wikipedia is to
+be believed, this timespan is about $\frac{1}{25}$ of a second, but of course it is going to
 be different for each pair of eyes.
 
 Although we don't normally see this effect in action, there are situations where it becomes
 apparent. For example, if a car drives by at nighttime, we see traces of light behind the
 actual car lights for a short moment (Assuming our eyes don't follow the car and stay still
 relative to the environment). In general, bright flashes of light followed by (relative)
-darkness tend to be the most pronounced manifestation of persistence of vision. It is exactly 
+darkness tend to be the most pronounced manifestation of persistence of vision. It is exactly
 this situation that can be recreated and exploited for the successful operation of a persistence
 of vision display.
 
 \subsection{Exploiting Persistence of Vision}
 
-Normally, Persistence of Vision is nothing more than an interesting effect. However, we can 
+Normally, Persistence of Vision is nothing more than an interesting effect. However, we can
 use this weakness of the human eye to our benefit.
 
 If a light source is spun quickly enough in a circle, we don't see a spinning
@@ -201,7 +201,7 @@ shorter than the time it takes for the light to fade away on our retinas. The ro
 at which we stop seeing a flickering circle and start seeing a solid, still circle is called
 the flicker fusion threshold.
 
-By controlling this light source quickly and accurately, we can make it so it is always turned 
+By controlling this light source quickly and accurately, we can make it so it is always turned
 on at certain points in the circle, and always turned off at others. By doing so, we are
 effectively multiplexing a zero-dimensional display (a point-like light source, e.g. an LED)
 so that it displays a one-dimensional image. By rotating a whole row of LEDs (a one-dimensional
@@ -233,7 +233,7 @@ small footprint --- ideal for the fast rotation --- and still packs quite some p
 runs at 96 MHz at a register width of 32 bit. There are 34 configurable I/O pins.
 
 The controller has to have some kind of reference point, so that it can calculate the current speed
-and angular position of the device. For this, I used a simple hall sensor on the rotating side, 
+and angular position of the device. For this, I used a simple hall sensor on the rotating side,
 which passes by a stationary magnet after each rotation.
 
 
@@ -244,7 +244,7 @@ which passes by a stationary magnet after each rotation.
 access all those LEDs individually, I had to use LED drivers. These come in the form of integrated
 circuits and receive some amount of data that they use to control a corresponding amount of LEDs.
 
-Initially, I had planned to implement a colour depth of 8 bits, allowing for 
+Initially, I had planned to implement a colour depth of 8 bits, allowing for
 $2^{24} = 16777216$ different colours. However, there were several difficulties that I would have
 had to deal with. First of all, all of the available LED drivers had one or both of the following
 shortcomings:
@@ -254,7 +254,7 @@ shortcomings:
 	\item Controlled using \iZc  instead of SPI
 
 Because \iZc uses pullup resistors instead of a push-pull drive, it takes a little moment for the
-logic level to return to its normal state. In order to ensure correct data transmission, it is 
+logic level to return to its normal state. In order to ensure correct data transmission, it is
 necessary to set a relatively slow clock speed. The two \iZc interfaces of the Teensy only support
 clock speeds of 2.4 MHz --- and because \iZc requires some overhead data to send out the slave's
 addresses, the actual data rate will be even lower.
@@ -263,7 +263,7 @@ However, the minimum data rate required to control the LEDs at an 8-bit colour d
 
 \begin{ownmath}
 % Yes it's a mess but \si makes it a unit, so it is not in cursive while still being small enough
-24\,\frac{\si{bit}}{\si{pixel}} * 16000\,\frac{\si{pixels}}{\si{rotation}} * 30\,\frac{\si{rotations}}{\si{second}} = \SI{11.52}{Mbps} 
+24\,\frac{\si{bit}}{\si{pixel}} * 16000\,\frac{\si{pixels}}{\si{rotation}} * 30\,\frac{\si{rotations}}{\si{second}} = \SI{11.52}{Mbps}
 \end{ownmath}
 
 This means that I'd need at least 5 parallel \iZc lines to control all the LEDs with 8 bit colour
@@ -274,7 +274,7 @@ possible but very cumbersome.
 
 If the colour depth is more than one bit, the LEDs will have to be dimmed using PWM. Normally, a
 rather low frequency of a few hundred to a few thousand Hz is sufficient as a PWM frequency, and
-most LED drivers modulate at frequencies within that range. In my case, however, the LEDs are 
+most LED drivers modulate at frequencies within that range. In my case, however, the LEDs are
 moving into a new pixel 3000 times a second (assuming rotationat 30 Hz). This means that a PWM
 frequency under 3000 Hz will involve losing information, and one slightly above 3000 Hz still
 won't look good. There would have to be a significant number of PWM cycles within each pixel,
@@ -313,10 +313,10 @@ The most important feature, however, is the fact that each output is controlled 
 current driver. Without these, it would've been necessary to solder a resistor in series
 with each individual LED, for a total of 480 resistors, 960 additional solder joints and a whole
 lot of wasted board space. With the constant current drivers, however, I could use a single
-resistor to set the current for all 16 LEDs attached to one chip. 
+resistor to set the current for all 16 LEDs attached to one chip.
 
-Unlike most simple shift registers, the drivers' outputs are current sinks instead of current 
-sources. This will be important when selecting the LEDs: In order to control each colour separately 
+Unlike most simple shift registers, the drivers' outputs are current sinks instead of current
+sources. This will be important when selecting the LEDs: In order to control each colour separately
 in an RGB LED, the cathodes have to be separated, while the anodes can be connected together.
 
 
@@ -333,7 +333,7 @@ My requirements were the following:
 	\item Current: 20 mA or more. Because the LEDs are within one pixel only $\frac{1}{100}$ of the
 time, they are essentially pulse width modulated, reducing their effective brightness. In order to
 still see the image clearly without darkening the room, they have to be bright enough.
-	\item Mounting type: Surface mount, so that I can route traces past the LEDs on the other side 
+	\item Mounting type: Surface mount, so that I can route traces past the LEDs on the other side
 of the PCB
 	\item Size: At most 5 * 5 mm, preferably smaller, but still large enough to be able to solder them
 by hand
@@ -343,7 +343,7 @@ it for illumination.
 \end{itemize}
 
 These requirements reduced the category "LED Indication - Discrete" from 18940 to 130 products.
-From those remaining products, I chose the one that was cheapest in a quantity of 160. This 
+From those remaining products, I chose the one that was cheapest in a quantity of 160. This
 led me to an LED with the beautiful name CLVBA-FKA-CAEDH8BBB7A363.
 
 
@@ -351,13 +351,13 @@ led me to an LED with the beautiful name CLVBA-FKA-CAEDH8BBB7A363.
 \subsection{Capacitors}
 
 A digital circuit like an LED driver can change its current consumption significantly within a
-short amount of time. Because the connections to the power supply are relatively long, they have 
+short amount of time. Because the connections to the power supply are relatively long, they have
 a substantial parasitic inductivity. So when the IC suddenly needs more current because all its
 LEDs have just been switched on, this current is not available instantly. Worse yet, if the LEDs
 are on and then are turned off, the current can't immediately stop flowing and will induce
 dangerous voltage spikes.
 
-In order to prevent those two situations from happening, I used capacitors. Namely, each LED 
+In order to prevent those two situations from happening, I used capacitors. Namely, each LED
 driver has its own \SI{1}{\micro\farad}  ceramic capacitor.
 
 
@@ -366,31 +366,31 @@ driver has its own \SI{1}{\micro\farad}  ceramic capacitor.
 
 In order for the whole device to rotate, I needed a motor. Luckily, I could salvage an appropriate
 part from an old RC motor boat. It's a big and heavy brushed motor. The fact that it has a built-in
-fan and was water-cooled in the boat leads me to think that its power output is much higher than 
+fan and was water-cooled in the boat leads me to think that its power output is much higher than
 what I need.
 
-Because of its high torque, I could attach the motor directly to the rotating shaft instead of 
+Because of its high torque, I could attach the motor directly to the rotating shaft instead of
 using gears or a belt drive. That way there are less moving parts and the motor can turn at a lower
-rotational speed, both resulting in less wear and noise. 
+rotational speed, both resulting in less wear and noise.
 
 
 
 \subsection{Power Transmission}
 
 To transmit power from the stationary power supply to the rotating part, I used slip rings. I made
-a relatively simple version, consisting of two round pieces of copper sheet on the rotating end, 
+a relatively simple version, consisting of two round pieces of copper sheet on the rotating end,
 and two long pieces of copper sheet on the stationary part.
 
 The slip rings must be able to transmit the current necessary to light all LEDs up at once.
-Assuming that each LED needs 20 mA, this current is about 9.6 A. Additionally, there is a small 
-current draw by the microcontroller, but it will be negligible in comparison. Testing has shown 
+Assuming that each LED needs 20 mA, this current is about 9.6 A. Additionally, there is a small
+current draw by the microcontroller, but it will be negligible in comparison. Testing has shown
 that the slip rings don't heat up noticeably when conducting 10 A for several minutes.
 
-In practice, however, this current is not reached since the vast majority of pixels are 
-switched off when displaying a typical 3D image. 
+In practice, however, this current is not reached since the vast majority of pixels are
+switched off when displaying a typical 3D image.
 
-Because two pieces of copper sheet rubbing against each other aren't the most reliable electrical 
-connection, I used a \SI{2200}{\micro\farad} electrolytic capacitor to smooth out the supply 
+Because two pieces of copper sheet rubbing against each other aren't the most reliable electrical
+connection, I used a \SI{2200}{\micro\farad} electrolytic capacitor to smooth out the supply
 voltage. Even with it, I found that the pressure between the two copper conductors had to be quite
 high for them to form a good contact.
 
@@ -410,11 +410,11 @@ The circuit diagram --- as well as the PCB layout --- were created in Eagle. Its
 limited to two-layer boards of sizes up to \SI{10}{\centi\meter} by \SI{8}{\centi\meter}, but
 that's more than enough for my purposes.
 
-In figure 2, the final version of the schematic is pictured. For the sake of simplicity and 
+In figure 2, the final version of the schematic is pictured. For the sake of simplicity and
 readibility, the layout corresponds roughly to how the board will look.
 
 I had to configure the footprints for the LED drivers and the LEDs by myself, which I did by
-reading about the physical dimensions in the respective data sheet. For the resistors and 
+reading about the physical dimensions in the respective data sheet. For the resistors and
 capacitors, Eagle had pre-built footprints which I could use.
 
 \subsection{Data Interface}
@@ -422,16 +422,16 @@ capacitors, Eagle had pre-built footprints which I could use.
 For transmitting data to the LED drivers, I used a simple row of 5 pins. Two of those pins are the
 data lines: The input is connected to the first chip's input, and the output comes from the last
 chip's output. The rest of the pins (clock, output enable and latch enable) are control lines,
-which go to all three chips simultaneously. The order of these connections was determined when 
+which go to all three chips simultaneously. The order of these connections was determined when
 making the PCB layout.
 
 \subsection{LED Drivers}
 
 The LED drivers are arranged in a so-called daisy chain configuration, where the serial data output
-of each chip is connected to the serial data input of the next chip. This is not only the case 
+of each chip is connected to the serial data input of the next chip. This is not only the case
 within one board, but also between the different boards: The data output of one board is connected
 to the next board's input. That way, all of the 30 LED drivers can be controlled by a single SPI
-bus without anything like a chip select signal. To send data to the chips, the microcontroller 
+bus without anything like a chip select signal. To send data to the chips, the microcontroller
 can simply send out 480 bit without interruption.
 
 \def \iout {I\textsubscript{OUT}}
@@ -452,8 +452,8 @@ Let's find out the resistance necessary for the output current to be \SI{20}{\mi
 \textrm{\rext} = 15 * \frac{\SI{1.25}{\volt}}{\SI{20}{\milli\ampere}} = \SI{937.5}{\ohm}
 \end{ownmath}
 
-The next smaller value within the E24 series is \SI{910}{\ohm}. By choosing this resistance, the 
-output current is \SI{20.6}{\milli\ampere}, which is close enough to the desired 
+The next smaller value within the E24 series is \SI{910}{\ohm}. By choosing this resistance, the
+output current is \SI{20.6}{\milli\ampere}, which is close enough to the desired
 \SI{20}{\milli\ampere}. I ordered 40 through-hole resistors of this value, because at the time I
 had in mind to etch my own boards at home.
 
@@ -461,7 +461,7 @@ had in mind to etch my own boards at home.
 \subsection{LEDs}
 
 The LEDs have their common anodes connected to \vdd. The cathodes are connected to a driver output
-each, and are arranged red - green - blue (from left to right). Series resistors aren't needed 
+each, and are arranged red - green - blue (from left to right). Series resistors aren't needed
 because the LED drivers handle current regulation.
 
 
@@ -473,7 +473,7 @@ because the LED drivers handle current regulation.
 \includegraphics[width=\textwidth]{./images/board-layout.png}
 \vspace{-4mm}
 \caption{The PCB layout in Eagle. Red = upper copper layer, blue = lower copper layer,
-green = vias, grey = silkscreen.} 
+green = vias, grey = silkscreen.}
 \vspace{6mm}
 \end{figure}
 
@@ -481,57 +481,57 @@ green = vias, grey = silkscreen.}
 
 The defining factor for the board layout was the pin layout of the LED drivers. The outputs are all
 at the bottom of the chip, while the data interface is at the top. This led me to the layout I have
-now: the LEDs are in a row at the bottom of the board where they can be directly connected to the 
-driver outputs on the upper copper layer. The control lines are is routed on the back side of the 
-board behind the chips, with vias going to the front side to connect to each chip. The data lines 
-go straight from one chip to the next one on the upper copper layer, with the last output going 
-back to the board's data interface on the back side. The resistors are placed on the right side of 
-their respective driver IC, jumping across the data traces. 
+now: the LEDs are in a row at the bottom of the board where they can be directly connected to the
+driver outputs on the upper copper layer. The control lines are is routed on the back side of the
+board behind the chips, with vias going to the front side to connect to each chip. The data lines
+go straight from one chip to the next one on the upper copper layer, with the last output going
+back to the board's data interface on the back side. The resistors are placed on the right side of
+their respective driver IC, jumping across the data traces.
 
-The supply lines are placed beneath the row of LEDs. Had I placed the supply on the upper edge of 
-the board, I still would've had to connect all the 16 anodes to \vdd. The driver chips, on the 
-other hand, only need one connection to \vdd and GND each, so by placing the supply lines at the 
+The supply lines are placed beneath the row of LEDs. Had I placed the supply on the upper edge of
+the board, I still would've had to connect all the 16 anodes to \vdd. The driver chips, on the
+other hand, only need one connection to \vdd and GND each, so by placing the supply lines at the
 bottom of the board I have less traces running across the board vertically.
 
-From a layout perspective, it would've made sense to put the GND line at the top of the board, 
-since the chips need one connection to that trace each, while the LEDs don't. However, I opted to 
-put both supply lines right above each other to reduce electromagnetic interference. If all the 
-LEDs are switched on suddenly and a lot of current starts to flow, a magnetic field builds up 
-quickly around the supply traces. This could induce bothering or even dangerous currents in the 
-surrounding electronics. By having the two supply lines close to each other, their magnetic fields 
-largely cancel each other out. Another advantage of having the supply at the bottom is that the 
+From a layout perspective, it would've made sense to put the GND line at the top of the board,
+since the chips need one connection to that trace each, while the LEDs don't. However, I opted to
+put both supply lines right above each other to reduce electromagnetic interference. If all the
+LEDs are switched on suddenly and a lot of current starts to flow, a magnetic field builds up
+quickly around the supply traces. This could induce bothering or even dangerous currents in the
+surrounding electronics. By having the two supply lines close to each other, their magnetic fields
+largely cancel each other out. Another advantage of having the supply at the bottom is that the
 distance to the delicate chips are a bit farther away.
 
 
 \subsection{Space-saving measures}
 
-In order for the production to be as cheap as possible as well as to minimise the rotating mass, I 
-tried to make the boards as small as possible. Ultimately, I managed to bring the size down to 
+In order for the production to be as cheap as possible as well as to minimise the rotating mass, I
+tried to make the boards as small as possible. Ultimately, I managed to bring the size down to
 \SI{73}{\milli\meter} by \SI{21}{\milli\meter}.
 
-In order to achieve this, but also to avoid large gaps between the pixels, I placed the LEDs as 
-close as possible to each other. The datasheet claims a width of \SI{2.8 +- 0.2}{\milli\meter}, 
-so I decided to place the LEDs at \SI{3}{\milli\metre} increments. On a grid of \SI{12.5}{mil}, 
+In order to achieve this, but also to avoid large gaps between the pixels, I placed the LEDs as
+close as possible to each other. The datasheet claims a width of \SI{2.8 +- 0.2}{\milli\meter},
+so I decided to place the LEDs at \SI{3}{\milli\metre} increments. On a grid of \SI{12.5}{mil},
 the next larger distance is \SI{125}{mil}, which is equal to \SI{3.175}{mm}.
 
-The connections to the cathodes of the red LED needs to pass by the other two cathodes, since 
-they're located on the lower side of the LED package. Because the LEDs are so close to each other, 
-the only option was to use the lower copper layer. The only place to go back to the upper copper 
+The connections to the cathodes of the red LED needs to pass by the other two cathodes, since
+they're located on the lower side of the LED package. Because the LEDs are so close to each other,
+the only option was to use the lower copper layer. The only place to go back to the upper copper
 layer was right beneath the driver chips.
 
 Initially, I had placed the capacitors right above the ICs. However, I could save a small bit of
-vertical board size by placing them at an offset to the right. That way I could push them down 
+vertical board size by placing them at an offset to the right. That way I could push them down
 until where the pins begin, which is a bit further down than the edge of the chip itself.
 
 
 \subsection{Thermal Considerations}
 
 A positive side effect of placing some vias beneath the chip is their thermal conductivity. That
-way, the chips' waste heat can be dissipated more effectively. The maximum power output of the 
+way, the chips' waste heat can be dissipated more effectively. The maximum power output of the
 chips --- when all the attached LEDs are turned on --- is as follows:
 
 \begin{ownmath}
-\textrm{P\textsubscript{MAX}} = (\SI{5}{\volt} - \textrm{V\textsubscript{F}}) * 
+\textrm{P\textsubscript{MAX}} = (\SI{5}{\volt} - \textrm{V\textsubscript{F}}) *
 \SI{20.6}{\milli\ampere\per output} * \SI{16}{outputs} = \SI{867.9}{\milli\watt}
 \end{ownmath}
 
@@ -559,10 +559,10 @@ of heat.
 
 \subsection{Fabrication}
 
-There's no shortage of firms who produce PCBs according to a custom layout. One of the cheapest 
+There's no shortage of firms who produce PCBs according to a custom layout. One of the cheapest
 providers to ship small production runs within a reasonable timeframe and with good production
 quality turned out to be OSHPark. They only produce in multiples of 3, so I ordered 12 instead of
-10 (which I'd have done anyway to have some spare boards). I submitted my order on the 5th of 
+10 (which I'd have done anyway to have some spare boards). I submitted my order on the 5th of
 October 2014 and paid US\$ 47. Ten days later I received a message that the boards were finished,
 and after another ten days of waiting they arrived at my doorstep.
 
@@ -571,7 +571,7 @@ and after another ten days of waiting they arrived at my doorstep.
 \vspace{3mm}
 \includegraphics[width=\textwidth]{./images/board-finished.jpeg}
 \vspace{-8mm}
-\caption{A finished circuit board} 
+\caption{A finished circuit board}
 \end{figure}
 
 
@@ -583,7 +583,7 @@ their driver chips. It took me two hours to solder the first board, but with inc
 the time for one row of LEDs got down to 25 or 30 minutes.
 
 The chips were a lot easier to solder than the LEDs, despite the distance between the individual
-pins only being \SI{0.635}{\milli\meter}. I could simply drown all the pins in solder, and then 
+pins only being \SI{0.635}{\milli\meter}. I could simply drown all the pins in solder, and then
 wick away all the solder bridges. That way I could solder twelve pins within the blink of an eye.
 
 
@@ -593,28 +593,28 @@ wick away all the solder bridges. That way I could solder twelve pins within the
 
 With the boards finished, I wanted to know whether or not they work. In order to find out, I wrote
 a little program on the microcontroller to light the LEDs up in all possible colours consecutively.
-It did not work at the first try, so I used an oscilloscope to see if data was being sent at all. 
+It did not work at the first try, so I used an oscilloscope to see if data was being sent at all.
 This was the case, the SPI library on the Teensy performed its task flawlessly.
 
 It turned out that the culprit were the bad contacts. Instead of soldering the wires onto the board
-and the microcontroller, I simply inserted them into the respective holes. This caused the 
+and the microcontroller, I simply inserted them into the respective holes. This caused the
 connection to have too much parasitic capacitance, and the signals (which were being sent at 4 MHz)
 did not have time to propagate up to their destination.
 
 I soldered the cables on properly and sure enough, the board worked as intended. I repeated this
-procedure for all ten boards to see if they all worked as well as the first one, which wasn't the 
+procedure for all ten boards to see if they all worked as well as the first one, which wasn't the
 case.
 
 Because of reasons unbeknownst to me, one particular LED driver started turning on all of its LEDs
 at a moderate brightness as soon as I powered it up --- even though no data was being sent at all.
 At first I thought that the serial data input had a solder bridge pulling it up to \vdd, and
 immediately sending a whole lot of 1's upon powering up the board. However, the data input pin was
-not close enough to a positive supply line for this to be an issue. Additionally, there would have 
-to be a clock signal as well as a pulse on the latch pin for the LEDs to light up. I gave up and 
-assumed that the chip was faulty, and when I replaced it with a spare part everything worked 
+not close enough to a positive supply line for this to be an issue. Additionally, there would have
+to be a clock signal as well as a pulse on the latch pin for the LEDs to light up. I gave up and
+assumed that the chip was faulty, and when I replaced it with a spare part everything worked
 perfectly.
 
-Apart from that, there were no major issues. I had a few LEDs which didn't light up when they 
+Apart from that, there were no major issues. I had a few LEDs which didn't light up when they
 should have. One of them had a solder bridge between the common anode and the cathode of the red
 LED, which made a voltage drop across the red LED impossible. Two were simply soldered on poorly
 and weren't connected to the drivers at all. A few other LEDs didn't work and I found no obvious
@@ -626,16 +626,16 @@ issues. I replaced them with spares, which did the trick.
 
 \subsection{Frame}
 
-The frame was built out of beech wood strips with a square cross section and a side length of 
-\SI{1.5}{\centi\meter}. The baseplate is made out of plywood and has the dimensions 
-\SI{15}{\centi\meter} by \SI{15}{\centi\meter} by \SI{1}{\centi\meter}. On it, I mounted two 
+The frame was built out of beech wood strips with a square cross section and a side length of
+\SI{1.5}{\centi\meter}. The baseplate is made out of plywood and has the dimensions
+\SI{15}{\centi\meter} by \SI{15}{\centi\meter} by \SI{1}{\centi\meter}. On it, I mounted two
 vertical wood strips with a length of \SI{20}{\centi\meter}, which were both stabilise by three
-struts. A horizontal board, mounted to the vertical strips at a height of \SI{20}{\centi\meter}, 
+struts. A horizontal board, mounted to the vertical strips at a height of \SI{20}{\centi\meter},
 holds the motor.
 
-On the top of the two vertical strips I placed another strip to hold the shaft in its position. 
+On the top of the two vertical strips I placed another strip to hold the shaft in its position.
 A simple hole served as a bearing, which I later replaced with a plastic insert (kindly sponsored
-by IGUS). 
+by IGUS).
 
 
 \subsection{Slip Rings}
@@ -644,19 +644,19 @@ In order to supply the rotating parts with electricity, I mounted a wooden disc 
 of the shaft. On both sides of that disc I glued on a round piece of copper sheet, which I then
 connected to cables going up to where the electronics would later be.
 
-On the stationary end, two long pieces of copper sheet serve as contacts. Because of their 
-spring-like properties, they exert a certain amount of pressure on the rotating disc. 
+On the stationary end, two long pieces of copper sheet serve as contacts. Because of their
+spring-like properties, they exert a certain amount of pressure on the rotating disc.
 
 Despite this, a considerable amount of pressure was necessary to form a good contact. The contact
 pressure proved to be a primitive, but usable way of roughly adjusting the rotational speed of
-the display. Sadly it's quite an inefficient approach: The motor uses a lot of current when 
-friction is applied to its load. It becomes noticeably warm after a few minutes of use, and 
+the display. Sadly it's quite an inefficient approach: The motor uses a lot of current when
+friction is applied to its load. It becomes noticeably warm after a few minutes of use, and
 measurements on the current limiting resistors have shown that it draws about \SI{6.5}{\ampere} at
 \SI{5}{\volt}.
 
-This constant pressure, in addition to the fact that copper is quite a soft metal, results in 
-considerable wear on the slip rings. Luckily, the stationary ends can be replaced without much 
-hassle. The rotating part would be a pain to replace, but since wear is distributed across the 
+This constant pressure, in addition to the fact that copper is quite a soft metal, results in
+considerable wear on the slip rings. Luckily, the stationary ends can be replaced without much
+hassle. The rotating part would be a pain to replace, but since wear is distributed across the
 whole copper disc, it will be a long time before this needs to be done.
 
 
@@ -664,20 +664,20 @@ whole copper disc, it will be a long time before this needs to be done.
 
 The microcontroller is mounted on another wooden disc, located a few centimetres above the slip
 rings. It also hosts the hall sensor, which is used to measure the rotational speed and calculate
-the position of the rotating part at any given moment. The corresponding magnet is mounted on a 
+the position of the rotating part at any given moment. The corresponding magnet is mounted on a
 piece of threaded rod, which itself is mounted on the same board as the motor.
 
-Additionally, the \SI{2200}{\micro\farad} capacitor is located on the upper wooden disc. In the 
-end, this place has become a bit of a mess, especially with all the cables going up to the circuit 
-boards. Luckily this isn't visible while the apparatus is running. 
+Additionally, the \SI{2200}{\micro\farad} capacitor is located on the upper wooden disc. In the
+end, this place has become a bit of a mess, especially with all the cables going up to the circuit
+boards. Luckily this isn't visible while the apparatus is running.
 
 
 \subsection{Circuit Boards}
 
 The boards were already equipped with components, but what was missing was the hold to mount them
-on the shaft. The diameter of this shaft is \SI{4}{\milli\meter}. In order to find a good hole 
+on the shaft. The diameter of this shaft is \SI{4}{\milli\meter}. In order to find a good hole
 size, I drilled a few test holes on a spare board. A hole of \SI{4}{\milli\meter} was so small for
-the boards to fit on the shaft, while \SI{4.5}{\milli\meter} was obviously too big. After 
+the boards to fit on the shaft, while \SI{4.5}{\milli\meter} was obviously too big. After
 chamfering the top end of the shaft, the board with a \SI{4}{\milli\meter} hole just barely could
 slide on the shaft. This tight fit proved to be advantageous, because torque can now be transmitted
 reliably from the shaft to the boards, and they don't slide around.

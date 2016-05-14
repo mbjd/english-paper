@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.5.7)  13 MAY 2016 21:53
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.5.7)  14 MAY 2016 11:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -475,13 +475,13 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 ] [1
 
-] (./paper.toc)
+] (./paper.toc [2
+
+])
 \tf@toc=\write3
 \openout3 = `paper.toc'.
 
- [2
-
-]
+ [3]
 Chapter 1.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <9> on input line 150.
@@ -512,16 +512,25 @@ File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 File: ./images/schematic.png Graphic file (type QTm)
 
 <use  "./images/schematic.png" > [6]
-File: ./images/board.png Graphic file (type QTm)
- <use  "./images/board.png" > [7] [8]
-(./paper.aux) ) 
+File: ./images/board-layout.png Graphic file (type QTm)
+ <use  "./images/board-layout.png" >
+[7] [8]
+Chapter 3.
+File: ./images/board-finished.jpeg Graphic file (type QTm)
+<use  "./images/board-finished.jpeg" > [9
+
+] [10] [11]
+Chapter 4.
+[12
+
+] (./paper.aux) ) 
 Here is how much of TeX's memory you used:
- 9954 strings out of 493706
- 219740 string characters out of 6145770
+ 9957 strings out of 493706
+ 219805 string characters out of 6145770
  233704 words of memory out of 5000000
- 13244 multiletter control sequences out of 15000+600000
+ 13245 multiletter control sequences out of 15000+600000
  14173 words of font info for 51 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
  33i,11n,39p,10372b,788s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on paper.pdf (11 pages).
+Output written on paper.pdf (16 pages).

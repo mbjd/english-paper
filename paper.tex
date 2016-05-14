@@ -470,7 +470,7 @@ because the LED drivers handle current regulation.
 
 \begin{figure}[h]
 \vspace{4mm}
-\includegraphics[width=\textwidth]{./images/board.png}
+\includegraphics[width=\textwidth]{./images/board-layout.png}
 \vspace{-4mm}
 \caption{The PCB layout in Eagle. Red = upper copper layer, blue = lower copper layer,
 green = vias, grey = silkscreen.} 
@@ -544,6 +544,149 @@ boards do get quite hot when operated at full power. In reality, however, the si
 less severe because the LEDs are typically turned on only during a fraction of the rotation.
 Furthermore, the quick rotation results in excellent air circulation, which aids the dissipation
 of heat.
+
+
+
+
+
+
+
+
+
+\chapter{Fabrication}
+
+\section{Circuit Boards}
+
+\subsection{Fabrication}
+
+There's no shortage of firms who produce PCBs according to a custom layout. One of the cheapest 
+providers to ship small production runs within a reasonable timeframe and with good production
+quality turned out to be OSHPark. They only produce in multiples of 3, so I ordered 12 instead of
+10 (which I'd have done anyway to have some spare boards). I submitted my order on the 5th of 
+October 2014 and paid US\$ 47. Ten days later I received a message that the boards were finished,
+and after another ten days of waiting they arrived at my doorstep.
+
+
+\begin{figure}[h]
+\vspace{3mm}
+\includegraphics[width=\textwidth]{./images/board-finished.jpeg}
+\vspace{-8mm}
+\caption{A finished circuit board} 
+\end{figure}
+
+
+\subsection{Assembly}
+
+As soon as I got the boards in the mail, I started soldering the parts to them. I started with the
+LEDs to avoid having to solder in the tight gap that would later be formed between the LEDs and
+their driver chips. It took me two hours to solder the first board, but with increasing practice
+the time for one row of LEDs got down to 25 or 30 minutes.
+
+The chips were a lot easier to solder than the LEDs, despite the distance between the individual
+pins only being \SI{0.635}{\milli\meter}. I could simply drown all the pins in solder, and then 
+wick away all the solder bridges. That way I could solder twelve pins within the blink of an eye.
+
+
+
+
+\subsection {Testing and Debugging}
+
+With the boards finished, I wanted to know whether or not they work. In order to find out, I wrote
+a little program on the microcontroller to light the LEDs up in all possible colours consecutively.
+It did not work at the first try, so I used an oscilloscope to see if data was being sent at all. 
+This was the case, the SPI library on the Teensy performed its task flawlessly.
+
+It turned out that the culprit were the bad contacts. Instead of soldering the wires onto the board
+and the microcontroller, I simply inserted them into the respective holes. This caused the 
+connection to have too much parasitic capacitance, and the signals (which were being sent at 4 MHz)
+did not have time to propagate up to their destination.
+
+I soldered the cables on properly and sure enough, the board worked as intended. I repeated this
+procedure for all ten boards to see if they all worked as well as the first one, which wasn't the 
+case.
+
+Because of reasons unbeknownst to me, one particular LED driver started turning on all of its LEDs
+at a moderate brightness as soon as I powered it up --- even though no data was being sent at all.
+At first I thought that the serial data input had a solder bridge pulling it up to \vdd, and
+immediately sending a whole lot of 1's upon powering up the board. However, the data input pin was
+not close enough to a positive supply line for this to be an issue. Additionally, there would have 
+to be a clock signal as well as a pulse on the latch pin for the LEDs to light up. I gave up and 
+assumed that the chip was faulty, and when I replaced it with a spare part everything worked 
+perfectly.
+
+Apart from that, there were no major issues. I had a few LEDs which didn't light up when they 
+should have. One of them had a solder bridge between the common anode and the cathode of the red
+LED, which made a voltage drop across the red LED impossible. Two were simply soldered on poorly
+and weren't connected to the drivers at all. A few other LEDs didn't work and I found no obvious
+issues. I replaced them with spares, which did the trick.
+
+
+\section{Physical Assembly}
+
+
+\subsection{Frame}
+
+The frame was built out of beech wood strips with a square cross section and a side length of 
+\SI{1.5}{\centi\meter}. The baseplate is made out of plywood and has the dimensions 
+\SI{15}{\centi\meter} by \SI{15}{\centi\meter} by \SI{1}{\centi\meter}. On it, I mounted two 
+vertical wood strips with a length of \SI{20}{\centi\meter}, which were both stabilise by three
+struts. A horizontal board, mounted to the vertical strips at a height of \SI{20}{\centi\meter}, 
+holds the motor.
+
+On the top of the two vertical strips I placed another strip to hold the shaft in its position. 
+A simple hole served as a bearing, which I later replaced with a plastic insert (kindly sponsored
+by IGUS). 
+
+
+\subsection{Slip Rings}
+
+In order to supply the rotating parts with electricity, I mounted a wooden disc right at the bottom
+of the shaft. On both sides of that disc I glued on a round piece of copper sheet, which I then
+connected to cables going up to where the electronics would later be.
+
+On the stationary end, two long pieces of copper sheet serve as contacts. Because of their 
+spring-like properties, they exert a certain amount of pressure on the rotating disc. 
+
+Despite this, a considerable amount of pressure was necessary to form a good contact. The contact
+pressure proved to be a primitive, but usable way of roughly adjusting the rotational speed of
+the display. Sadly it's quite an inefficient approach: The motor uses a lot of current when 
+friction is applied to its load. It becomes noticeably warm after a few minutes of use, and 
+measurements on the current limiting resistors have shown that it draws about \SI{6.5}{\ampere} at
+\SI{5}{\volt}.
+
+This constant pressure, in addition to the fact that copper is quite a soft metal, results in 
+considerable wear on the slip rings. Luckily, the stationary ends can be replaced without much 
+hassle. The rotating part would be a pain to replace, but since wear is distributed across the 
+whole copper disc, it will be a long time before this needs to be done.
+
+
+\subsection{Controller}
+
+The microcontroller is mounted on another wooden disc, located a few centimetres above the slip
+rings. It also hosts the hall sensor, which is used to measure the rotational speed and calculate
+the position of the rotating part at any given moment. The corresponding magnet is mounted on a 
+piece of threaded rod, which itself is mounted on the same board as the motor.
+
+Additionally, the \SI{2200}{\micro\farad} capacitor is located on the upper wooden disc. In the 
+end, this place has become a bit of a mess, especially with all the cables going up to the circuit 
+boards. Luckily this isn't visible while the apparatus is running. 
+
+
+\subsection{Circuit Boards}
+
+The boards were already equipped with components, but what was missing was the hold to mount them
+on the shaft. The diameter of this shaft is \SI{4}{\milli\meter}. In order to find a good hole 
+size, I drilled a few test holes on a spare board. A hole of \SI{4}{\milli\meter} was so small for
+the boards to fit on the shaft, while \SI{4.5}{\milli\meter} was obviously too big. After 
+chamfering the top end of the shaft, the board with a \SI{4}{\milli\meter} hole just barely could
+slide on the shaft. This tight fit proved to be advantageous, because torque can now be transmitted
+reliably from the shaft to the boards, and they don't slide around.
+
+
+\chapter{Programming}
+
+
+
 
 
 

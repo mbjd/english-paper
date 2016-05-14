@@ -22,3 +22,14 @@
 \contentsline {subsection}{\numberline {2.5.1}General Remarks}{7}
 \contentsline {subsection}{\numberline {2.5.2}Space-saving measures}{8}
 \contentsline {subsection}{\numberline {2.5.3}Thermal Considerations}{8}
+\contentsline {chapter}{\numberline {3}Fabrication}{9}
+\contentsline {section}{\numberline {3.1}Circuit Boards}{9}
+\contentsline {subsection}{\numberline {3.1.1}Fabrication}{9}
+\contentsline {subsection}{\numberline {3.1.2}Assembly}{9}
+\contentsline {subsection}{\numberline {3.1.3}Testing and Debugging}{9}
+\contentsline {section}{\numberline {3.2}Physical Assembly}{10}
+\contentsline {subsection}{\numberline {3.2.1}Frame}{10}
+\contentsline {subsection}{\numberline {3.2.2}Slip Rings}{10}
+\contentsline {subsection}{\numberline {3.2.3}Controller}{10}
+\contentsline {subsection}{\numberline {3.2.4}Circuit Boards}{11}
+\contentsline {chapter}{\numberline {4}Programming}{12}

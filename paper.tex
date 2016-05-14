@@ -536,18 +536,18 @@ chips --- when all the attached LEDs are turned on --- is as follows:
 
 \begin{ownmath}
 \textrm{P\textsubscript{MAX}} = (\SI{5}{\volt} - \textrm{V\textsubscript{F}}) *
-\SI{20.6}{\milli\ampere\per output} * \SI{16}{outputs} = \SI{867.9}{\milli\watt}
+\SI{20.6}{\milli\ampere\per output} * \SI{16}{outputs} = \SI{780}{\milli\watt}
 \end{ownmath}
 
 V\textsubscript{F} is different depending on the colour of the LED, so I just used the average
 value, which is \SI{2.633}{\volt}. The actual values are \SI{1.9}{\volt} for red and \SI{3}{\volt}
 for green and blue.
 
-A power output of almost a watt is not to be underestimated, and tests have shown that that the
-boards do get quite hot when operated at full power. In reality, however, the situation is much
-less severe because the LEDs are typically turned on only during a fraction of the rotation.
-Furthermore, the quick rotation results in excellent air circulation, which aids the dissipation
-of heat.
+A power output of \SI{780}{\milli\watt} is not to be underestimated on such a small PCB, and tests
+have shown that that the boards do get quite hot when operated at full power. In reality, however,
+the situation is much less severe because the LEDs are typically turned on only during a fraction
+of the rotation. Furthermore, the quick rotation results in excellent air circulation, which aids
+the dissipation of heat.
 
 
 

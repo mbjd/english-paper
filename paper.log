@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.5.7)  15 MAY 2016 17:41
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.5.7)  15 MAY 2016 20:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -508,7 +508,7 @@ Chapter 2.
 ] [3]
 File: ./images/tlc-pins.png Graphic file (type QTm)
  <use  "./images/tlc-pins.png" >
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 360.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 359.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1cmr.fd

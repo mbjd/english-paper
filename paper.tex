@@ -156,12 +156,12 @@ The objective of this project is to build a working prototype of a 3D persistenc
 display and to document the process of doing so. The necessary steps are (roughly) as follows:
 
 \begin{itemize}
-	\item Understand and explain how and why such a display can work in principle
-	\item Come up with realistic technical specifications, founded on the previously outlined
+\item Understand and explain how and why such a display can work in principle
+\item Come up with realistic technical specifications, founded on the previously outlined
 theory
-	\item Select parts and build the device according to the specifications
-	\item Write a program that makes the device display a 3D image
-	\item Draw conclusions: Did I achieve my goals? What could have been done better?
+\item Select parts and build the device according to the specifications
+\item Write a program that makes the device display a 3D image
+\item Draw conclusions: Did I achieve my goals? What could have been done better?
 How can the project be further improved?
 \end{itemize}
 
@@ -213,10 +213,10 @@ image.
 
 \begin{itemize}
 
-	\item Resolution of 16 * 100 * 10 pixels (radius * circumference * height)
-	\item Each pixel consists of an RGB LED
-	\item Colour depth of 3 bit per pixel, or one bit per LED
-	\item Rotational frequency of at least 30 Hz, or as fast as it needs to be in order to not flicker
+\item Resolution of 16 * 100 * 10 pixels (radius * circumference * height)
+\item Each pixel consists of an RGB LED
+\item Colour depth of 3 bit per pixel, or one bit per LED
+\item Rotational frequency of at least 30 Hz, or as fast as it needs to be in order to not flicker
 
 \end{itemize}
 
@@ -250,7 +250,7 @@ shortcomings:
 
 \begin{itemize}
 
-	\item Controlled using \iZc  instead of SPI
+\item Controlled using \iZc  instead of SPI
 
 Because \iZc uses pullup resistors instead of a push-pull drive, it takes a little moment for the
 logic level to return to its normal state. In order to ensure correct data transmission, it is
@@ -269,7 +269,7 @@ This means that I'd need at least 5 parallel \iZc lines to control all the LEDs 
 depth. Because each Teensy only has two of them, I'd need three Teensy boards, which would be
 possible but very cumbersome.
 
-	\item Insufficient PWM frequency
+\item Insufficient PWM frequency
 
 If the colour depth is more than one bit, the LEDs will have to be dimmed using PWM. Normally, a
 rather low frequency of a few hundred to a few thousand Hz is sufficient as a PWM frequency, and
@@ -322,21 +322,20 @@ in an RGB LED, the cathodes have to be separated, while the anodes can be connec
 
 \subsection{LEDs}
 
-Like all the other parts, I ordered the LEDs from Digikey. Their website
-contains an excellent tool, enabling the user to restrict the selection based on different criteria.
-My requirements were the following:
+Like all the other parts, I ordered the LEDs from Digikey. Their website contains an excellent
+tool, enabling the user to restrict the selection based on different criteria. My requirements
+were the following:
 
 \begin{itemize}
 
-	\item Colours: Red, green and blue
-	\item Current: 20 mA or more. Because the LEDs are within one pixel only $\frac{1}{100}$ of the
+\item Colours: Red, green and blue
+\item Current: 20 mA or more. Because the LEDs are within one pixel only $\frac{1}{100}$ of the
 time, they are essentially pulse width modulated, reducing their effective brightness. In order to
 still see the image clearly without darkening the room, they have to be bright enough.
-	\item Mounting type: Surface mount, so that I can route traces past the LEDs on the other side
+\item Mounting type: Surface mount, so that I can route traces past the LEDs on the other side
 of the PCB
-	\item Size: At most 5 * 5 mm, preferably smaller, but still large enough to be able to solder them
-by hand
-	\item Diffused lens, so the colours mix well even when viewing the LED directly instead of using
+\item Size: At most 5 * 5 mm, preferably smaller, but still large enough to solder by hand
+\item Diffused lens, so the colours mix well even when viewing the LED directly instead of using
 it for illumination.
 
 \end{itemize}
@@ -507,7 +506,7 @@ put both supply lines right above each other to reduce electromagnetic interfere
 LEDs are switched on suddenly and a lot of current starts to flow, a magnetic field builds up
 quickly around the supply traces. This could induce bothering or even dangerous currents in the
 surrounding electronics. By having the two supply lines close to each other, their magnetic fields
-largely cancel each other out. 
+largely cancel each other out.
 
 
 \subsection{Space-saving measures}
@@ -526,8 +525,8 @@ they're located on the lower side of the LED package. Because the LEDs are so cl
 the only option was to use the lower copper layer. The only place to go back to the upper copper
 layer was right beneath the driver chips.
 
-Initially, I had placed the decoupling capacitors right above the ICs. However, I could save a 
-small bit of vertical board size by placing them at an offset to the right. That way I could push 
+Initially, I had placed the decoupling capacitors right above the ICs. However, I could save a
+small bit of vertical board size by placing them at an offset to the right. That way I could push
 them down until where the pins begin, which is a bit further down than the edge of the chip itself.
 
 
@@ -698,12 +697,12 @@ There were two factors I had to carefully consider while arranging the boards:
 In the end, I decided to arrange the boards in a double-spiral arrangement. This was the only
 arrangement I could think of that (theoretically) has no static imbalance at all. Because each
 board has another board on the exact opposite side of the shaft, there are five pairs of boards
-where one board statically balances out the other. However, each pair has some dynamic inbalance 
-because the two boards aren't mounted at the same height. This could've been minimised by 
-alternating the order of boards between each pair. However, this wasn't necessary because the 
+where one board statically balances out the other. However, each pair has some dynamic inbalance
+because the two boards aren't mounted at the same height. This could've been minimised by
+alternating the order of boards between each pair. However, this wasn't necessary because the
 vibrations were within reasonable bounds.
 
-The visibility is not too bad either: On the viewer-facing half of the display, all LEDs are 
+The visibility is not too bad either: On the viewer-facing half of the display, all LEDs are
 constantly visible. On the backside, it is possible that one group of boards is right before the
 other one, causing some layers of the image to disappear.
 
@@ -715,7 +714,7 @@ other one, causing some layers of the image to disappear.
 The following program has been compiled with the Arduino IDE 1.0.6 and sent to the Teensy by the
 Teensyduino 1.20 plugin. However, the most part of the program has been written in Sublime Text 2
 with the stino plugin. This combination has a few advantages over simply using the Arduino IDE to
-write all code, namely there's automatic code completion, support for several cursors, and a 
+write all code, namely there's automatic code completion, support for several cursors, and a
 search-and-replace function with regex suport. I installed and used these programs on Mac OS 10.9
 and later 10.10.
 
@@ -723,14 +722,14 @@ and later 10.10.
 
 \subsection{Theory}
 
-In order for the image to stay still despite the rotational speed not being completely constant, 
+In order for the image to stay still despite the rotational speed not being completely constant,
 the frequency of LED refreshed must be constantly adjusted based on the rotational period. Because
 there are 100 pixels per revolution, the time to display one pixel must be $\frac{1}{100}$ of the
 rotational period.
 
-This value can be measured easily by using the hall sensor. By dividing this value by 100, we can 
+This value can be measured easily by using the hall sensor. By dividing this value by 100, we can
 obtain the duration of one pixel for the current speed. If the rotational speed changes, that's a
-bit of a problem: The measured value is from the previous rotation, but in the current rotation, 
+bit of a problem: The measured value is from the previous rotation, but in the current rotation,
 the device already turns slightly faster. This causes the image to be slightly warped right after
 powering up the display. However, once it has reached temrminal velocity, this effect is no longer
 noticeable, because now the subsequent rotations have about the same period.
@@ -740,7 +739,7 @@ noticeable, because now the subsequent rotations have about the same period.
 This behaviour is implemented with an interrupt that runs each time the magnet is detected (i.e.
 after each rotation). Within that interrupt, several things happen:
 
-First, we read a variable called \texttt{sinceMagnet}. As its name says, it keeps track of 
+First, we read a variable called \texttt{sinceMagnet}. As its name says, it keeps track of
 the number of microseconds since the last time the magnet was detected. It's of the special type
 \texttt{elapsedMicros}, which means that it's automatically incremented each microsecond. This
 value is divided by 100 and stored in \texttt{microsPerPixel}, where it represents the amount of
@@ -748,7 +747,7 @@ time that any given pixel should be displayed for.
 
 This variable is now reset to 0 to start the new rotation. The same is done to another
 variable, \texttt{nextPixelMicros}. It contains the next point in time when the pixels
-should be refreshed, with respect to the start of the rotation (which just happened). 
+should be refreshed, with respect to the start of the rotation (which just happened).
 
 In the main loop of the program, this variable is continuously compared to \texttt{sinceMagnet}. If
 sinceMagnet is bigger, the LEDs are refreshed by calling \texttt{sendData}. Within that function,
@@ -769,7 +768,7 @@ explain how I achieved this.
 
 To save the image on the microcontroller, I used a simple three-dimensional array containing 100 *
 10 * 6 bytes of data. The first index stands for the angle of a pixel in hundredths of a circle,
-the second index corresponds to the height and the third one describes the position of each byte 
+the second index corresponds to the height and the third one describes the position of each byte
 on a row of LEDs. Because there are 48 LEDs per row, 6 bytes can be used to describe the row's
 state without wasting any storage space. The only way to be more efficient in terms of storage
 would be to compresss data, which would require significantly more computing power.
@@ -825,7 +824,7 @@ rotation. However, after that, control was given bach to the \texttt{sendData} f
 of that function, \texttt{currentPixel} was incremented by one. That way, the \texttt{currentPixel}
 variable already had a value of one when it should've stayed at 0. For the entirety of the next
 rotation, \texttt{currentPixel} was off by one, resulting in the image quickly turning by
-\SI{3.6}{\degree}. 
+\SI{3.6}{\degree}.
 
 
 

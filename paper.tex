@@ -12,7 +12,6 @@
 % Don't indent any first lines
 \setlength{\parindent}{0mm}
 
-
 % A little space between paragraphs
 \setlength{\parskip}{1.5mm}
 
@@ -32,11 +31,11 @@
 % In order to include images
 \usepackage{graphicx}
 
-
 % Label figures 1, 2, 3, 4... Instead of 1.1, 1.2, 2.1, 3.1 etc.
 \usepackage{chngcntr}
 \counterwithout{figure}{chapter}
 
+% Display SI units
 \usepackage{siunitx}
 
 % To have text wrapped around images
@@ -50,10 +49,6 @@
 \newenvironment{ownmath}
 {\vspace{2mm}\hspace{15pt}\begin{math}}
 {\end{math}\vspace{2mm}}
-
-
-
-
 
 
 
@@ -470,12 +465,21 @@ because the LED drivers handle current regulation.
 
 
 
+
+
+
+
+
+
+
+
+
 \section{PCB Design}
 
 \begin{figure}[h]
 \vspace{4mm}
 \includegraphics[width=\textwidth]{./images/board-layout.png}
-\vspace{-4mm}
+\vspace{-6mm}
 \caption{The PCB layout in Eagle. Red = upper copper layer, blue = lower copper layer,
 green = vias, grey = silkscreen.}
 \vspace{6mm}
@@ -503,8 +507,7 @@ put both supply lines right above each other to reduce electromagnetic interfere
 LEDs are switched on suddenly and a lot of current starts to flow, a magnetic field builds up
 quickly around the supply traces. This could induce bothering or even dangerous currents in the
 surrounding electronics. By having the two supply lines close to each other, their magnetic fields
-largely cancel each other out. Another advantage of having the supply at the bottom is that the
-distance to the delicate chips are a bit farther away.
+largely cancel each other out. 
 
 
 \subsection{Space-saving measures}
@@ -523,9 +526,9 @@ they're located on the lower side of the LED package. Because the LEDs are so cl
 the only option was to use the lower copper layer. The only place to go back to the upper copper
 layer was right beneath the driver chips.
 
-Initially, I had placed the capacitors right above the ICs. However, I could save a small bit of
-vertical board size by placing them at an offset to the right. That way I could push them down
-until where the pins begin, which is a bit further down than the edge of the chip itself.
+Initially, I had placed the decoupling capacitors right above the ICs. However, I could save a 
+small bit of vertical board size by placing them at an offset to the right. That way I could push 
+them down until where the pins begin, which is a bit further down than the edge of the chip itself.
 
 
 \subsection{Thermal Considerations}
@@ -641,7 +644,6 @@ On the top of the two vertical strips I placed another strip to hold the shaft i
 A simple hole served as a bearing, which I later replaced with a plastic insert (kindly sponsored
 by IGUS).
 
-
 \subsection{Slip Rings}
 
 In order to supply the rotating parts with electricity, I mounted a wooden disc right at the bottom
@@ -686,10 +688,168 @@ chamfering the top end of the shaft, the board with a \SI{4}{\milli\meter} hole 
 slide on the shaft. This tight fit proved to be advantageous, because torque can now be transmitted
 reliably from the shaft to the boards, and they don't slide around.
 
+There were two factors I had to carefully consider while arranging the boards:
+
+\begin{itemize}
+\item The boards had to be balanced out to minimise static and dynamic unbalance
+\item The amount of boards obstructing other boards had to be minimal
+\end{itemize}
+
+In the end, I decided to arrange the boards in a double-spiral arrangement. This was the only
+arrangement I could think of that (theoretically) has no static imbalance at all. Because each
+board has another board on the exact opposite side of the shaft, there are five pairs of boards
+where one board statically balances out the other. However, each pair has some dynamic inbalance 
+because the two boards aren't mounted at the same height. This could've been minimised by 
+alternating the order of boards between each pair. However, this wasn't necessary because the 
+vibrations were within reasonable bounds.
+
+The visibility is not too bad either: On the viewer-facing half of the display, all LEDs are 
+constantly visible. On the backside, it is possible that one group of boards is right before the
+other one, causing some layers of the image to disappear.
+
 
 \chapter{Programming}
 
-% todo
+\section{Used Software}
+
+The following program has been compiled with the Arduino IDE 1.0.6 and sent to the Teensy by the
+Teensyduino 1.20 plugin. However, the most part of the program has been written in Sublime Text 2
+with the stino plugin. This combination has a few advantages over simply using the Arduino IDE to
+write all code, namely there's automatic code completion, support for several cursors, and a 
+search-and-replace function with regex suport. I installed and used these programs on Mac OS 10.9
+and later 10.10.
+
+\section{Timing}
+
+\subsection{Theory}
+
+In order for the image to stay still despite the rotational speed not being completely constant, 
+the frequency of LED refreshed must be constantly adjusted based on the rotational period. Because
+there are 100 pixels per revolution, the time to display one pixel must be $\frac{1}{100}$ of the
+rotational period.
+
+This value can be measured easily by using the hall sensor. By dividing this value by 100, we can 
+obtain the duration of one pixel for the current speed. If the rotational speed changes, that's a
+bit of a problem: The measured value is from the previous rotation, but in the current rotation, 
+the device already turns slightly faster. This causes the image to be slightly warped right after
+powering up the display. However, once it has reached temrminal velocity, this effect is no longer
+noticeable, because now the subsequent rotations have about the same period.
+
+\subsection{Implementation}
+
+This behaviour is implemented with an interrupt that runs each time the magnet is detected (i.e.
+after each rotation). Within that interrupt, several things happen:
+
+First, we read a variable called \texttt{sinceMagnet}. As its name says, it keeps track of 
+the number of microseconds since the last time the magnet was detected. It's of the special type
+\texttt{elapsedMicros}, which means that it's automatically incremented each microsecond. This
+value is divided by 100 and stored in \texttt{microsPerPixel}, where it represents the amount of
+time that any given pixel should be displayed for.
+
+This variable is now reset to 0 to start the new rotation. The same is done to another
+variable, \texttt{nextPixelMicros}. It contains the next point in time when the pixels
+should be refreshed, with respect to the start of the rotation (which just happened). 
+
+In the main loop of the program, this variable is continuously compared to \texttt{sinceMagnet}. If
+sinceMagnet is bigger, the LEDs are refreshed by calling \texttt{sendData}. Within that function,
+\texttt{nextPixelMicros} is incremented by \texttt{microsPerPixel}, causing the program to wait for
+the display to turn another $\frac{1}{100}$ of a full circle. After that, it'll display the next
+pixel.
+
+The implementation of the described behaviour can be found in the appendix, where the whole source
+code is to be found. Specifically, what I've just talked about is contained in the
+\texttt{timerUpdate} function, as well as in the main \texttt{loop}.
+
+
+\section{Data storage and display}
+
+The previously mentioned function \texttt{sendData} needs to be able to know which bytes to send
+based on one parameter, which is the current angle of of the display. In this section, I will
+explain how I achieved this.
+
+To save the image on the microcontroller, I used a simple three-dimensional array containing 100 *
+10 * 6 bytes of data. The first index stands for the angle of a pixel in hundredths of a circle,
+the second index corresponds to the height and the third one describes the position of each byte 
+on a row of LEDs. Because there are 48 LEDs per row, 6 bytes can be used to describe the row's
+state without wasting any storage space. The only way to be more efficient in terms of storage
+would be to compresss data, which would require significantly more computing power.
+
+Because the PCBs are not right above each other, the data that is being sent out in one refresh
+don't correspond to the pixels that are above each other in the image. In order avoid having to
+account for the angular offsets of each board while creating an image, I made the program do that
+work automatically.
+
+Each pair of two boards are mounted on the exact opposite side, making the angle between them
+\SI{180}{\degree} or 50 pixels. Each subsequent pair is additionally rotated by \SI{28.8}{\degree}
+which is equivalent to 8 pixels.
+
+The program accounts for this arrangement by using a simple for loop. It iterates over five pairs
+of boards. At its start, the program calculates the angle and height of the first board based on
+the control variable. After the data has been sent, it then moves to the second board by adding 50
+to the angle and incrementing the board counter, and feeds the second board with data too.
+
+After these two additions, the angle value will go over 99 in many cases, which is the highest
+possible array index. Since the pixel at position $100+n$ is the same as the one at position $n$, I
+can pervent causing undefined behaviour by applying a modulus 100 operator to the angle value
+before using it to access the array.
+
+
+\section{Miscellaneous}
+
+While the program works the way it is described above, there are a few small things that I managed
+to further improve.
+
+Because I selected the position of the boards with respect to the hall sensor arbitrarily, the
+image was turned around. To fix that, I added a constant value to all angle values, so now the
+first pixel is displayed exactly at 0° instead of whereever the hall sensor detects the magnet.
+
+Whenever I started up the program, it started displaying the first pixel. It even did so when I
+connected the Teensy to my laptop via USB. This was dangerous because neither the Teensy nor the
+laptop's USB port can handle a lot of current, and if more than a handful of LEDs were switched on,
+the Teensy could've been damaged.
+
+To fix this I added a boolean variable called \texttt{running}, which is set to \texttt{false} by
+default and only flipped when the magnet is first detected. That way the program only starts
+running if the display is actually rotating, at which point we can be sure that power is supplied
+through the sliprings rather than the USB port.
+
+The images displayed were constantly jittering around instead of staying still like they should. It
+took me a long time to find the source of this bug, but I managed to fix it in time for the swiss
+national competition organised by "Swiss Youth in Science".
+
+The problem was that sometimes, the magnet was detected while \texttt{sendData} was still running.
+Because the hall sensor's interrupt had a higher priority than the timer interrupt I had used to
+send data, control was immediately given to the former. The \texttt{timerUpdate} function was
+executed normally, resetting \texttt{currentPixel} to zero and reading out the duration of the last
+rotation. However, after that, control was given bach to the \texttt{sendData} function. At the end
+of that function, \texttt{currentPixel} was incremented by one. That way, the \texttt{currentPixel}
+variable already had a value of one when it should've stayed at 0. For the entirety of the next
+rotation, \texttt{currentPixel} was off by one, resulting in the image quickly turning by
+\SI{3.6}{\degree}. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

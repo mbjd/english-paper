@@ -33,3 +33,9 @@
 \contentsline {subsection}{\numberline {3.2.3}Controller}{10}
 \contentsline {subsection}{\numberline {3.2.4}Circuit Boards}{11}
 \contentsline {chapter}{\numberline {4}Programming}{12}
+\contentsline {section}{\numberline {4.1}Used Software}{12}
+\contentsline {section}{\numberline {4.2}Timing}{12}
+\contentsline {subsection}{\numberline {4.2.1}Theory}{12}
+\contentsline {subsection}{\numberline {4.2.2}Implementation}{12}
+\contentsline {section}{\numberline {4.3}Data storage and display}{13}
+\contentsline {section}{\numberline {4.4}Miscellaneous}{13}

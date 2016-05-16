@@ -3,7 +3,7 @@
 \usepackage[margin=2.0cm]{geometry}
 
 \usepackage{xspace}
-\def \iZc {I\textsuperscript{2}C\xspace}
+\def \itwoc {I\textsuperscript{2}C\xspace}
 \def \vdd {V\textsubscript{DD}}
 
 % Indent the first line of the first paragraph like the first lines of subsequent paragraphs
@@ -36,7 +36,7 @@
 \counterwithout{figure}{chapter}
 
 % Display SI units
-\usepackage{siunitx}
+\usepackage[separate-uncertainty=true, multi-part-units=single]{siunitx}
 
 % To have text wrapped around images
 \usepackage{wrapfig}
@@ -148,7 +148,7 @@ POV display so far (and have published it on the internet).\footnote{It turned o
 a third one: When I posted a picture of my project on the internet, a reddit user told me about
 the display he built years before.}
 Neither of these is being produced on a grand scale, instead they are --- like most 2D versions
---- side projects of makers or engineers.
+--- side projects of hobbyists or engineers.
 
 \section{Goals}
 
@@ -213,7 +213,7 @@ image.
 
 \begin{itemize}
 
-\item Resolution of 16 * 100 * 10 pixels (radius * circumference * height)
+\item Resolution of $16 \cdot 100 \cdot 10$ pixels (radius $\cdot$ circumference $\cdot$ height)
 \item Each pixel consists of an RGB LED
 \item Colour depth of 3 bit per pixel, or one bit per LED
 \item Rotational frequency of at least 30 Hz, or as fast as it needs to be in order to not flicker
@@ -250,22 +250,23 @@ shortcomings:
 
 \begin{itemize}
 
-\item Controlled using \iZc  instead of SPI
+\item Controlled using \itwoc  instead of SPI
 
-Because \iZc uses pullup resistors instead of a push-pull drive, it takes a little moment for the
-logic level to return to its normal state. In order to ensure correct data transmission, it is
-necessary to set a relatively slow clock speed. The two \iZc interfaces of the Teensy only support
-clock speeds of 2.4 MHz --- and because \iZc requires some overhead data to send out the slave's
-addresses, the actual data rate will be even lower.
+Because \itwoc uses pullup resistors instead of a push-pull drive, it takes a little moment for
+the logic level to return to its normal state. In order to ensure correct data transmission, it is
+necessary to set a relatively slow clock speed. The two \itwoc interfaces of the Teensy only
+support clock speeds of up to 2.4 MHz --- and because \itwoc requires some overhead data to send
+out the slave's addresses, the actual data rate will be even lower.
 
 However, the minimum data rate required to control the LEDs at an 8-bit colour depth is as follows:
 
 \begin{ownmath}
 % Yes it's a mess but \si makes it a unit, so it is not in cursive while still being small enough
-24\,\frac{\si{bit}}{\si{pixel}} * 16000\,\frac{\si{pixels}}{\si{rotation}} * 30\,\frac{\si{rotations}}{\si{second}} = \SI{11.52}{Mbps}
+24\,\frac{\si{bit}}{\si{pixel}} \cdot 16000\,\frac{\si{pixels}}{\si{rotation}} \cdot
+30\,\frac{\si{rotations}}{\si{second}} = \SI{11.52}{Mbps} 
 \end{ownmath}
 
-This means that I'd need at least 5 parallel \iZc lines to control all the LEDs with 8 bit colour
+This means that I'd need at least 5 parallel \itwoc lines to control all the LEDs with 8 bit colour
 depth. Because each Teensy only has two of them, I'd need three Teensy boards, which would be
 possible but very cumbersome.
 
@@ -281,10 +282,10 @@ for example 10, which would require a PWM frequency of 30 KHz.
 
 \end{itemize}
 
-Because of these problems, I ditched the idea of 8-bit colour depth and instead went for the simpler approach
-of one-bit colour depth. Both problems are solved by switching to 1 bit: The data rate doesn't have
-to be as high (and there are lots of chips that are controlled by SPI), and PWM is not necessary
-anymore.
+Because of these problems, I ditched the idea of 8-bit colour depth and instead went for the
+simpler approach of one-bit colour depth. Both problems are solved by switching to 1 bit: The data
+rate doesn't have to be as high (and there are lots of chips that are controlled by SPI), and PWM
+is not necessary anymore.
 
 
 % todo: Find out if this is necessary in the end
@@ -299,11 +300,11 @@ anymore.
 
 \end{wrapfigure}
 
-After quite some searching around, I decided to use the TLC5927 by Texas Instruments. This is
-essentially a shift register with some extra features. Like every shift register, it has a serial
-data input (SDI), a serial data output (SDO), and a clock pin (CLK). Additionally, there is a latch
-pin (LE), which serves the purpose of only refreshing the state of the LEDs once all data has been
-sent.
+After quite some searching around, I decided to use the TLC5927 by Texas Instruments. It is
+essentially a shift register with some extra features. Like every normal shift register, it has a
+serial data input (SDI), a serial data output (SDO), and a clock pin (CLK). Additionally, there is
+a latch pin (LE), which serves the purpose of only refreshing the state of the LEDs once all data
+has been sent.
 
 Furthermore, there is a pin called "output enable" (OE). If it is at GND, all LEDs are turned off,
 and it's at \vdd, they are controlled by the data that the driver chip has received.
@@ -329,18 +330,22 @@ were the following:
 \begin{itemize}
 
 \item Colours: Red, green and blue
+
 \item Current: 20 mA or more. Because the LEDs are within one pixel only $\frac{1}{100}$ of the
 time, they are essentially pulse width modulated, reducing their effective brightness. In order to
 still see the image clearly without darkening the room, they have to be bright enough.
-\item Mounting type: Surface mount, so that I can route traces past the LEDs on the other side
-of the PCB
-\item Size: At most 5 * 5 mm, preferably smaller, but still large enough to solder by hand
+
+\item Mounting type: Surface mount, so I can still use the other side of the board
+
+\item Size: At most $\SI{5}{\milli\meter}$ by $\SI{5}{\milli\meter}$, preferably smaller, but
+still large enough to solder by hand
+
 \item Diffused lens, so the colours mix well even when viewing the LED directly instead of using
 it for illumination.
 
 \end{itemize}
 
-These requirements reduced the category "LED Indication - Discrete" from 18940 to 130 products.
+These requirements reduced the category "LED Indication - Discrete" from 18940 to 130 items.
 From those remaining products, I chose the one that was cheapest in a quantity of 160. This
 led me to an LED with the beautiful name CLVBA-FKA-CAEDH8BBB7A363.
 
@@ -441,13 +446,13 @@ between the output current (\iout) and the resistor's value (\rext):
 
 % Lots of ugly hacks to have a non-italic font
 \begin{ownmath}
-\textrm{\iout} = 15 * \frac{\SI{1.25}{\volt}}{\si{\rext}}
+\textrm{\iout} = 15 \cdot \frac{\SI{1.25}{\volt}}{\si{\rext}}
 \end{ownmath}
 
 Let's find out the resistance necessary for the output current to be \SI{20}{\milli\ampere}:
 
 \begin{ownmath}
-\textrm{\rext} = 15 * \frac{\SI{1.25}{\volt}}{\SI{20}{\milli\ampere}} = \SI{937.5}{\ohm}
+\textrm{\rext} = 15 \cdot \frac{\SI{1.25}{\volt}}{\SI{20}{\milli\ampere}} = \SI{937.5}{\ohm}
 \end{ownmath}
 
 The next smaller value within the E24 series is \SI{910}{\ohm}. By choosing this resistance, the
@@ -516,7 +521,7 @@ tried to make the boards as small as possible. Ultimately, I managed to bring th
 \SI{73}{\milli\meter} by \SI{21}{\milli\meter}.
 
 In order to achieve this, but also to avoid large gaps between the pixels, I placed the LEDs as
-close as possible to each other. The datasheet claims a width of \SI{2.8 +- 0.2}{\milli\meter},
+close as possible to each other. The datasheet claims a width of \SI{2.8 \pm 0.2}{\milli\meter},
 so I decided to place the LEDs at \SI{3}{\milli\metre} increments. On a grid of \SI{12.5}{mil},
 the next larger distance is \SI{125}{mil}, which is equal to \SI{3.175}{mm}.
 
@@ -537,8 +542,8 @@ way, the chips' waste heat can be dissipated more effectively. The maximum power
 chips --- when all the attached LEDs are turned on --- is as follows:
 
 \begin{ownmath}
-\textrm{P\textsubscript{MAX}} = (\SI{5}{\volt} - \textrm{V\textsubscript{F}}) *
-\SI{20.6}{\milli\ampere\per output} * \SI{16}{outputs} = \SI{780}{\milli\watt}
+\textrm{P\textsubscript{MAX}} = (\SI{5}{\volt} - \textrm{V\textsubscript{F}}) \cdot
+\SI{20.6}{\milli\ampere\per output} \cdot \SI{16}{outputs} = \SI{780}{\milli\watt}
 \end{ownmath}
 
 V\textsubscript{F} is different depending on the colour of the LED, so I just used the average
@@ -766,12 +771,12 @@ The previously mentioned function \texttt{sendData} needs to be able to know whi
 based on one parameter, which is the current angle of of the display. In this section, I will
 explain how I achieved this.
 
-To save the image on the microcontroller, I used a simple three-dimensional array containing 100 *
-10 * 6 bytes of data. The first index stands for the angle of a pixel in hundredths of a circle,
-the second index corresponds to the height and the third one describes the position of each byte
-on a row of LEDs. Because there are 48 LEDs per row, 6 bytes can be used to describe the row's
-state without wasting any storage space. The only way to be more efficient in terms of storage
-would be to compresss data, which would require significantly more computing power.
+To save the image on the microcontroller, I used a simple three-dimensional array containing $100
+\cdot 10 \cdot 6$ bytes of data. The first index stands for the angle of a pixel in hundredths of
+a circle, the second index corresponds to the height and the third one describes the position of
+each byte on a row of LEDs. Because there are 48 LEDs per row, 6 bytes can be used to describe the
+row's state without wasting any storage space. The only way to be more efficient in terms of
+storage would be to compresss data, which would require significantly more computing power.
 
 Because the PCBs are not right above each other, the data that is being sent out in one refresh
 don't correspond to the pixels that are above each other in the image. In order avoid having to
@@ -829,7 +834,50 @@ rotation, \texttt{currentPixel} was off by one, resulting in the image quickly t
 
 
 
+\chapter{Operation}
 
+\section{Power Supply}
+
+Initially I had planned to supply the PCBs with \SI{5}{\volt}. However, the Teensy sends its
+signals at \SI{3.3}{\volt}. The driver chips, on the other hand, only read a logical high when a
+signal is over $0.7 \cdot \textrm{\vdd}$. At \SI{5}{\volt}, this value would be \SI{3.5}{\volt}.
+So I tried powering the boards with only \SI{3.3}{\volt}, and everything worked perfectly. Better
+yet, the boards weren't getting as hot anymore.
+
+According to the manufacturer, the Teensy needs at least \SI{3.7}{\volt} to operate, presumably
+because it uses a linear regulator to get a stable voltage ov \SI{3.3}{\volt}. However, there were
+no problems when I started using \SI{3.3}{\volt}. Even though the regulator probably reduces that
+voltage to less than \SI{3}{\volt}, the processor still runs at its full clock speed of
+\SI{96}{\mega\hertz}.
+
+Unfortunately, the PC power supply which I used for the project broke down. As I later found out,
+the culprit was the motor consuming too much current. At that time, I didn't use any series
+resistance to limit the current flowing through the motor, which I powered with \SI{3.3}{\volt}.
+This has caused the inrush current to be greater than what the power supply could handle.
+
+To remedy this, I used a pair of long, thin wires to connect to the motor to provide some
+resistance. I later replaced these with two \SI{150}{\milli\ohm} power resistors. Now there are two
+ways to power the motor: I can use \SI{5}{\volt} and connect the resistors in series for a total
+resistance of \SI{300}{\milli\ohm}, or I can power it with \SI{3.3}{\volt} and connect the
+resistors in parallel, resulting in a resistance of \SI{75}{\milli\ohm}. The latter method is more
+efficient, but it causes the acceleration at startup to be slower.
+
+
+\section{Mechanical Problems}
+
+Because the slip rings weren't fixed in their position, they could slide out of their slots after
+a few minutes of operation. I fixed this issue by mounting a small wooden board onto these slots
+(perventing lateral movement), and routing the cables going from the power supply to the sliprings
+through two holes in that board (perventing lengthwise movement).
+
+The boards weren't exactly aligned at the \SI{28.8}{\degree} that I specified. This caused the
+image to be displayed crookedly: Pixels that should've been right above each other were shifted
+sideways by a small distance. Whenever I adjusted the boards, they would be misaligned again after
+using the display for some time. To fix this, I aligned them correctly one last time and used
+enough solder on the power cables running through the boards for them to form a solid connection.
+
+The bolt nut that held the motor in place started coming loose because of the vibrations. To
+pervent that from happening again, I used a second nut and tightened it against the first one.
 
 
 

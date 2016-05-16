@@ -39,3 +39,6 @@
 \contentsline {subsection}{\numberline {4.2.2}Implementation}{12}
 \contentsline {section}{\numberline {4.3}Data storage and display}{13}
 \contentsline {section}{\numberline {4.4}Miscellaneous}{13}
+\contentsline {chapter}{\numberline {5}Operation}{15}
+\contentsline {section}{\numberline {5.1}Power Supply}{15}
+\contentsline {section}{\numberline {5.2}Mechanical Problems}{15}

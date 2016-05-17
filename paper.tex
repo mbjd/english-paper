@@ -37,6 +37,8 @@
 
 % Display SI units
 \usepackage[separate-uncertainty=true, multi-part-units=single]{siunitx}
+\sisetup{load-configurations = binary}
+
 
 % To have text wrapped around images
 \usepackage{wrapfig}
@@ -949,13 +951,13 @@ imporvements concerning power transmission.
 \subsection{Animated images}
 
 Something I had in mind since the beginning of this project were animated images. The Teensy 3.1
-has \SI{256}{\kilo\byte} of memory, which would fit 42 images of \SI{6}{\kilo\byte} each. This
+has \SI{256}{kB} of memory, which would fit 42 images of \SI{6}{kB} each. This
 corresponts to roughly a second of playback. In order to display longer animations, there are
 several workarounds: Instead of showing one image that spans the entirety of the rotation, I can
 instead only save an image that is 25 pixels and display it four times.
 
 In order to get around the limit of flash memory, external storage would be necessary. Even with
-only \SI{1}{\giga\byte}, I could save 166666 frames, thus removing any practical limit in terms of
+only \SI{1}{GB}, I could save 166666 frames, thus removing any practical limit in terms of
 playback time.
 
 \subsection{Interactive Programs}
@@ -978,7 +980,7 @@ Because most people haven't ever seen such a display before, it would be an imme
 in the display window of any business.
 
 Another possibility would be video games. Although the limited resolution and computing power
-would make it difficult to run the newest games, 3D version of classics like Pong, Snake or a
+would make it difficult to run the newest games, 3D versions of classics like Pong, Snake or a
 simple platform game would be worth a shot.
 
 

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.5.7)  17 MAY 2016 08:25
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.5.7)  17 MAY 2016 15:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -406,18 +406,18 @@ Package: wrapfig 2003/01/31  v 3.6
 ) (./paper.aux)
 \openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -463,18 +463,18 @@ File: siunitx-abbreviations.cfg 2015/01/21 v2.6e siunitx: Abbreviated units
 )
 \c__siunitx_mathsf_int=\count136
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 62.
+(Font)              <10.95> on input line 64.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 62.
+(Font)              <8> on input line 64.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 62.
+(Font)              <6> on input line 64.
 \c__siunitx_mathtt_int=\count137
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 68.
+(Font)              <12> on input line 70.
  [1
 
 ]
-Overfull \hbox (2.43333pt too wide) in paragraph at lines 120--127
+Overfull \hbox (2.43333pt too wide) in paragraph at lines 122--129
 [] [] 
  []
 
@@ -489,16 +489,16 @@ Overfull \hbox (2.43333pt too wide) in paragraph at lines 120--127
  [3]
 Chapter 1.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 149.
+(Font)              <9> on input line 151.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 149.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 159.
+(Font)              <5> on input line 151.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 161.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 159.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 161.
  [1
 
 ]
@@ -508,7 +508,7 @@ Chapter 2.
 ] [3]
 File: ./images/tlc-pins.png Graphic file (type QTm)
  <use  "./images/tlc-pins.png" >
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 364.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 366.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1cmr.fd
@@ -538,14 +538,14 @@ Chapter 5.
 Chapter 6.
 [16
 
-] (./paper.aux) ) 
+] [17] (./paper.aux) ) 
 Here is how much of TeX's memory you used:
  9957 strings out of 493706
  219807 string characters out of 6145770
- 233836 words of memory out of 5000000
+ 233807 words of memory out of 5000000
  13245 multiletter control sequences out of 15000+600000
  14173 words of font info for 51 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
- 33i,11n,41p,10372b,820s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 33i,11n,41p,10410b,820s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on paper.pdf (20 pages).
+Output written on paper.pdf (21 pages).

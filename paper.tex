@@ -263,7 +263,7 @@ However, the minimum data rate required to control the LEDs at an 8-bit colour d
 \begin{ownmath}
 % Yes it's a mess but \si makes it a unit, so it is not in cursive while still being small enough
 24\,\frac{\si{bit}}{\si{pixel}} \cdot 16000\,\frac{\si{pixels}}{\si{rotation}} \cdot
-30\,\frac{\si{rotations}}{\si{second}} = \SI{11.52}{Mbps} 
+30\,\frac{\si{rotations}}{\si{second}} = \SI{11.52}{Mbps}
 \end{ownmath}
 
 This means that I'd need at least 5 parallel \itwoc lines to control all the LEDs with 8 bit colour
@@ -337,8 +337,8 @@ still see the image clearly without darkening the room, they have to be bright e
 
 \item Mounting type: Surface mount, so I can still use the other side of the board
 
-\item Size: At most $\SI{5}{\milli\meter}$ by $\SI{5}{\milli\meter}$, preferably smaller, but
-still large enough to solder by hand
+\item Size: At most \SI{5}{\milli\meter} by \SI{5}{\milli\meter}, preferably smaller, but still
+large enough to solder by hand
 
 \item Diffused lens, so the colours mix well even when viewing the LED directly instead of using
 it for illumination.
@@ -537,9 +537,9 @@ them down until where the pins begin, which is a bit further down than the edge 
 
 \subsection{Thermal Considerations}
 
-A positive side effect of placing some vias beneath the chip is their thermal conductivity. That
-way, the chips' waste heat can be dissipated more effectively. The maximum power output of the
-chips --- when all the attached LEDs are turned on --- is as follows:
+A positive side effect of placing some vias beneath the chip is their thermal conductivity, which
+helps disspiate the chip's excess heat. The maximum power output of the chips --- when all the
+attached LEDs are turned on --- is as follows:
 
 \begin{ownmath}
 \textrm{P\textsubscript{MAX}} = (\SI{5}{\volt} - \textrm{V\textsubscript{F}}) \cdot
@@ -815,7 +815,7 @@ the Teensy could've been damaged.
 To fix this I added a boolean variable called \texttt{running}, which is set to \texttt{false} by
 default and only flipped when the magnet is first detected. That way the program only starts
 running if the display is actually rotating, at which point we can be sure that power is supplied
-through the sliprings rather than the USB port.
+through the slip rings rather than the USB port.
 
 The images displayed were constantly jittering around instead of staying still like they should. It
 took me a long time to find the source of this bug, but I managed to fix it in time for the swiss
@@ -867,7 +867,7 @@ efficient, but it causes the acceleration at startup to be slower.
 
 Because the slip rings weren't fixed in their position, they could slide out of their slots after
 a few minutes of operation. I fixed this issue by mounting a small wooden board onto these slots
-(perventing lateral movement), and routing the cables going from the power supply to the sliprings
+(perventing lateral movement), and routing the cables going from the power supply to the slip rings
 through two holes in that board (perventing lengthwise movement).
 
 The boards weren't exactly aligned at the \SI{28.8}{\degree} that I specified. This caused the
@@ -878,6 +878,112 @@ enough solder on the power cables running through the boards for them to form a 
 
 The bolt nut that held the motor in place started coming loose because of the vibrations. To
 pervent that from happening again, I used a second nut and tightened it against the first one.
+
+
+\chapter{Conclusions}
+
+\section{Possible Improvements}
+
+\subsection{Controller and Data Transmission}
+
+The Teensy 3.1 is currently mounted quite loosely on its wooden disc. A piece of wire goes through
+two unoccupied contacts as well as through two holes in the disc. In addition, the cables forming
+the SPI bus aren't laid out neatly at all; many are too long and don't take the direct route.
+
+This situation could be improved by replacing the upper wooden disc with another printed circuit
+board. All connections could be routed elegantly on the PCB, and the SPI interfaces could be
+formed by two ribbon cables. The hall sensor could be properly soldered on instead of fixing it in
+place using hot glue.
+
+Between the individual LED boards, ribbon cables could also be considered. However, the only
+connections that always go to the board right above are CLK, LE and OE, while the serial data
+inputs and outputs have to be connected to the board on the opposite side. These connections would
+still have to be formed by individual cables.
+
+
+\subsection{Slip Rings}
+
+Because the slip rings are quite rough and not completely horizontal, a lot of pressure is needed
+to form a consistent contact. This leads to high friction between the two contacts, which then
+results in quick wear as well as a lot of friction.
+
+The main reason why the display is not energy efficient at all are the slip rings. At the start of
+the project, I had the idea of using a \SI{3.5}{\milli\meter} phone connector to transmit power.
+However, I abolished that plan because of two reasons. Firstly, I had concerns that such a small
+connector would have trouble conducting the maximum current of \SI{10}{\ampere}. This would most
+likely not have been a problem, since only a small part of all pixels are turned on in a typical
+image, which causes the average current to be a small fraction of the maximum value.
+
+The second problem would've been the difficulty of mounting a phone connector on the display. I
+would've had to place it at the end of the shaft, where it would've also served as a bearing. In
+order to minimise the forces acting upon the plug, it would've had to be mounted exactly in the
+center of the shaft. I couldn't come up with a solid way to connect both of the phone plugs' ends
+to the display.
+
+A much more elegant solution would've been to use induction to transfer power. By having a
+stationary and a rotating coil close together, I could've passed a high-frequency alternating
+current through the stationary one, causing current to flow in the rotating one as well. The
+advantages of such an approach would be substantial: The bearings would be the only contact point
+between the rotating and stationary part, causing friction to be minimal. I could've also
+completely eliminated the annoying, broadband noise currently emitted by the slip rings.
+
+I didn't implement wireless power transfer because I felt like the extra work wasn't worth it,
+especially considering this was a prototype. If I wanted to produce this display en masse,
+inductive power transfer would definitely be the way to go as it's the only way to make the
+display somewhat quiet.
+
+
+\subsection{Motor}
+
+I decided to drive the display directly without any kind of gear reduction because that was the
+simplest solution. I only could do so because the motor was strong enough. Unfortunately, it
+consumes a substantial amount of current.
+
+If I wanted to sell my display commercially, I'd use a smaller motor, drive it at a higher
+rotational speed and gear it down. To save energy, I would also implement one of the above
+imporvements concerning power transmission.
+
+
+\section{Future Outlook}
+
+\subsection{Animated images}
+
+Something I had in mind since the beginning of this project were animated images. The Teensy 3.1
+has \SI{256}{\kilo\byte} of memory, which would fit 42 images of \SI{6}{\kilo\byte} each. This
+corresponts to roughly a second of playback. In order to display longer animations, there are
+several workarounds: Instead of showing one image that spans the entirety of the rotation, I can
+instead only save an image that is 25 pixels and display it four times.
+
+In order to get around the limit of flash memory, external storage would be necessary. Even with
+only \SI{1}{\giga\byte}, I could save 166666 frames, thus removing any practical limit in terms of
+playback time.
+
+\subsection{Interactive Programs}
+
+It would be interesting to not only display predefined images, but to actually run a program that
+can respond to user input, like a video game. In order to communicate with the external world, a
+wireless interface would be necessary. Readily available solutions include small WLAN or bluetooth
+modules, or the transmitters and receivers commonly used in radio-controlled aircraft.
+
+\subsection{Applications}
+
+Because of the low resolution and colour depth, the high level of noise, quick wear and the
+inability to send images to the display while running, this display is not suited as a replacement
+for your everyday computer or TV screen. However, these problems can all be fixed completely or
+partially, so that there could one day exist a version of my display which is actually suitable
+for the above purposes.
+
+One domain where I could imagine a display like mine being especially useful is advertising.
+Because most people haven't ever seen such a display before, it would be an immediate eye-catcher
+in the display window of any business.
+
+Another possibility would be video games. Although the limited resolution and computing power
+would make it difficult to run the newest games, 3D version of classics like Pong, Snake or a
+simple platform game would be worth a shot.
+
+
+
+
 
 
 

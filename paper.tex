@@ -2,6 +2,10 @@
 
 \usepackage[margin=2.0cm]{geometry}
 
+\usepackage{hyperref}
+
+\usepackage[]{algorithm2e}
+
 \usepackage{xspace}
 \def \itwoc {I\textsuperscript{2}C\xspace}
 \def \vdd {V\textsubscript{DD}}
@@ -834,7 +838,97 @@ rotation, \texttt{currentPixel} was off by one, resulting in the image quickly t
 \SI{3.6}{\degree}.
 
 
+\section{Image Creation}
 
+Initially, all my images were made completely by hand. I had to enter the individual bits into the
+program that would result in the desired image. Obviously this was a time-consuming and error
+prone task. In order to simplify the process of making an image, I wrote a python program that
+would support me in doing so. All of the source code is available on \url{github.com/mbjd/_3DPOV}.
+
+\subsection{Basics}
+
+In order to save an image, I used a three-dimensional array of 100 $\cdot$ 10 $\cdot$ 16 integers.
+The lowest three bits of each integer represent the states of the red, green and blue LED
+respectively. The rest of the bits are unused. This causes the program to use more memory than
+strictly necessary, but it makes editing the pixels much simpler.
+
+On the display itself everything stays the same, and no bits are wasted. The conversion from the
+easily editable to the memory efficient format is automatically handled by the python program.
+
+The pixels are arranged in a polar coordinate system. Because it's simpler to express straight
+lines, spheres or surfaces in terms of cartesian coordinates, calculations typically go like this:
+
+\begin{algorithm}[H]
+\ForAll{pixels in the image}{
+convert polar coordinates to cartesian\;
+calculate some function with the coordinates as input\;
+colour the pixel accordingly\;
+}
+\end{algorithm}
+
+The actual source code of the program outlined below is fully available on
+\url{http://github.com/mbjd/\_3DPOV} in the folder \texttt{image\_creation}. 
+
+\subsection{Straight lines}
+
+Given two points, the program can draw a line connecting them. To do that, it calculates the
+distance to the line for each point, and if it's below a certain threshold, the point is coloured.
+This threshold controls the thickness of the line and can be selected freely, as can the colour of
+the line. The implementation can be found in the functions \texttt{drawLine}.
+
+\subsection{Spheres}
+
+Spheres are even simpler than straight lines: For each point, the program compares the distance to
+the center against the desired radius of the sphere. If it's smaller than the radius, the point is
+within the sphere and can be coloured. This functionality is implemented as \texttt{drawSphere}.
+Another version of this function, called \texttt{hollowSphere}, checks if the distance to the
+middle point is within a certain range, drawing a hollow sphere.
+
+\subsection{Planes}
+
+A plane can be defined in terms of the equation $ax + by + cz = d$, where x, y, and z are the
+cartesian coordinates, and a, b, c, and d are parameters defining the surface. Additionally, the
+function takes an argument specifying the thickness of the plane. In the end, all pixels whose
+coordinates $(x,y,z)$ satisfy $|ax + by + cz - d| < \frac{\si{thickness}}{2}$ are
+coloured with the specified colour. The implementation is called \texttt{drawSurface}.
+
+\subsection{Functions}
+
+There are two fundamental types of functions that the program can draw. The first one are functions
+of the form $f(x,y,z) \rightarrow colour$. In order to render such a function, I simply iterate
+over all pixels in the image, calculating the function and colouring the pixel with its return
+value.
+
+Secondly, the program can plot functions of the form $f(x, y) \rightarrow z$. It is a special case
+of the first one and could be defined in terms of it: I could simply iterate over all 16000 pixels
+and check if $\lfloor f(x, y) \rfloor = z$. However, that would be inefficient, because the same
+calculation would be made 10 times for the 10 different $z$ values. Instead, I only iterate over
+all combinations of $x$ and $y$ values, and colour the pixel at the corresponding $z$ value. That
+way, the function is only evaluated 1600 instead of 16000 times.
+
+The respective implementations can be found in \texttt{plotColourFunction} and
+\texttt{plotRealFunction}.
+
+There's a third one called \texttt{plotBoolFunction}. It's similar to \texttt{plotColourFunction}
+and can also be redefined in terms of it (with no significant loss in performance). Instead of
+converting the coordinates $(x, y, z)$ to a colour, it takes a function that returns a boolean
+value, and a colour. If the result of the given function is \texttt{True}, the pixel is coloured
+with the given colour, otherwise nothing happens.
+
+
+\subsection{Ada colourditional functionality}
+
+Using these basic building blocks, I can draw more complex shapes by repeatedly calling one of the
+above functions with different arguments. For example, there's the function
+\texttt{connectcircle}. It takes a list of points and connects each with the next one, and the
+last to the first point. That way I can draw arbitrary polygons.
+
+I can also automatically draw a cuboid by specifying two points. The cuboid is then put up between
+these points, all edges being parallel to the coordinate axes. The implementation is called
+\texttt{drawCuboid}.
+
+Another function, \texttt{connectAll}, takes a group of points and draws a line between each
+possible pair of points.  That way, I can draw a 3-sided pyramid in one go.
 
 \chapter{Operation}
 
@@ -950,6 +1044,7 @@ imporvements concerning power transmission.
 
 \subsection{Animated images}
 
+% Somehow \bit and \byte don't work in siunitx, so I'm just using the literal strings instead
 Something I had in mind since the beginning of this project were animated images. The Teensy 3.1
 has \SI{256}{kB} of memory, which would fit 42 images of \SI{6}{kB} each. This
 corresponts to roughly a second of playback. In order to display longer animations, there are
@@ -979,9 +1074,10 @@ One domain where I could imagine a display like mine being especially useful is 
 Because most people haven't ever seen such a display before, it would be an immediate eye-catcher
 in the display window of any business.
 
-Another possibility would be video games. Although the limited resolution and computing power
-would make it difficult to run the newest games, 3D versions of classics like Pong, Snake or a
-simple platform game would be worth a shot.
+Another fun thing to try would be video games. Although the limited resolution and computing power
+would make it difficult to run the latest and greatest games, 3D versions of classics like Pong,
+Snake or a simple platform game would certainly be worth a shot.
+
 
 
 

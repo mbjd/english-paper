@@ -2,10 +2,7 @@
 
 \usepackage[margin=2.0cm]{geometry}
 
-\usepackage{hyperref}
-
-\usepackage[]{algorithm2e}
-
+% A few useful definitions
 \usepackage{xspace}
 \def \itwoc {I\textsuperscript{2}C\xspace}
 \def \vdd {V\textsubscript{DD}}
@@ -32,7 +29,7 @@
 \par\nobreak\vspace{40 pt}}}
 \makeatother
 
-% In order to include images
+% Needed to include images
 \usepackage{graphicx}
 
 % Label figures 1, 2, 3, 4... Instead of 1.1, 1.2, 2.1, 3.1 etc.
@@ -43,21 +40,24 @@
 \usepackage[separate-uncertainty=true, multi-part-units=single]{siunitx}
 \sisetup{load-configurations = binary}
 
-
-% To have text wrapped around images
+% To have text wrapped around figures
 \usepackage{wrapfig}
 
 % Some parameters for wrapfig
-\setlength{\intextsep}{0pt}%
-\setlength{\columnsep}{15pt}%
+\setlength{\intextsep}{0pt}
+\setlength{\columnsep}{15pt}
 
-% Same as regular math but with a bit of space before and after
+% Same as regular math but with a bit of space before and after, and indented a little
 \newenvironment{ownmath}
 {\vspace{2mm}\hspace{15pt}\begin{math}}
 {\end{math}\vspace{2mm}}
 
 
-
+\usepackage{listings} % For code snippets
+% \usepackage{courier} % For monspaced code
+\usepackage{inconsolata}
+\lstset{basicstyle=\small\ttfamily,breaklines=true}
+\usepackage[]{algorithm2e} % For pseudocode
 
 
 
@@ -73,9 +73,7 @@
 % Generate title
 \maketitle
 
-% Introduction
 % * after chapters to not number them
-% TODO: don't show page numbers
 \chapter*{Preface}
 
 \pagenumbering{Roman}
@@ -106,7 +104,7 @@ turned out to be not very far from the truth).
 \section*{Credits}
 
 First and foremost, I would like to express my gratitude to Mr. Patrick Spengler, my physics
-teacher and the mentor of this thesis. Not only did he solve numerous malfunctions, but he also
+teacher and the mentor of this project. Not only did he solve numerous malfunctions, but he also
 is partly responsible for my interest in electronics and engineering.
 
 I am thankful to Ms. Ursula Schamberger, teacher of the woodworking class, where I built the
@@ -760,11 +758,11 @@ This variable is now reset to 0 to start the new rotation. The same is done to a
 variable, \texttt{nextPixelMicros}. It contains the next point in time when the pixels
 should be refreshed, with respect to the start of the rotation (which just happened).
 
-In the main loop of the program, this variable is continuously compared to \texttt{sinceMagnet}. If
-sinceMagnet is bigger, the LEDs are refreshed by calling \texttt{sendData}. Within that function,
-\texttt{nextPixelMicros} is incremented by \texttt{microsPerPixel}, causing the program to wait for
-the display to turn another $\frac{1}{100}$ of a full circle. After that, it'll display the next
-pixel.
+In the main loop of the program, this variable is continuously compared to \texttt{sinceMagnet}.
+If \texttt{sinceMagnet} is bigger, the LEDs are refreshed by calling \texttt{sendData}. Within
+that function, \texttt{nextPixelMicros} is incremented by \texttt{microsPerPixel}, causing the
+program to wait for the display to turn another $\frac{1}{100}$ of a full circle. After that,
+it'll display the next pixel.
 
 The implementation of the described behaviour can be found in the appendix, where the whole source
 code is to be found. Specifically, what I've just talked about is contained in the
@@ -843,7 +841,8 @@ rotation, \texttt{currentPixel} was off by one, resulting in the image quickly t
 Initially, all my images were made completely by hand. I had to enter the individual bits into the
 program that would result in the desired image. Obviously this was a time-consuming and error
 prone task. In order to simplify the process of making an image, I wrote a python program that
-would support me in doing so. All of the source code is available on \url{github.com/mbjd/_3DPOV}.
+would support me in doing so. All of the source code is available on
+\texttt{github.com/mbjd/\_3DPOV} in the folder \texttt{image\_creation}.
 
 \subsection{Basics}
 
@@ -866,8 +865,6 @@ colour the pixel accordingly\;
 }
 \end{algorithm}
 
-The actual source code of the program outlined below is fully available on
-\url{http://github.com/mbjd/\_3DPOV} in the folder \texttt{image\_creation}. 
 
 \subsection{Straight lines}
 
@@ -932,7 +929,37 @@ possible pair of points.  That way, I can draw a 3-sided pyramid in one go.
 
 \subsection{Usage}
 
-% todo write this
+This whole program is a python module, which is to say you can import it from any other python
+program, including the interactive python shell.
+
+\begin{lstlisting}
+$ python
+[...]
+>>> from mkmodel import *
+\end{lstlisting}
+\vspace{-2mm}
+
+After doing that, all of the functions defined in the program are available to play with. Using
+the \texttt{newImage} function, an empty image can be generated. We then draw a line and a sphere
+in the image:
+
+\begin{lstlisting}
+>>> img = newImage()
+>>> drawLinePolar(img, (0, 7, 14), (30, 2, 14), green, 0.5)
+>>> drawSpherePolar(img, (62, 4.5, 7), blue, 4.5)
+\end{lstlisting}
+\vspace{-2mm}
+
+When the desired image is created, it can be saved as an Arduino program:
+
+\begin{lstlisting}
+>>> writeSketch(img, 'example')
+\end{lstlisting}
+\vspace{-2mm}
+
+The complete program, ready to upload to the Teensy, is then saved in
+\texttt{./example/example.ino}. Creating a directory for each program is necessary because the
+Arduino IDE only opens them if they're located in a directory with the same name as the program.
 
 \chapter{Operation}
 

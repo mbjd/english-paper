@@ -1,5 +1,4 @@
 \documentclass[a4paper, 11pt, titlepage]{report}
-
 \usepackage[margin=2.0cm]{geometry}
 
 % A few useful definitions
@@ -7,14 +6,16 @@
 \def \itwoc {I\textsuperscript{2}C\xspace}
 \def \vdd {V\textsubscript{DD}}
 
+% Load the "hyperref" package, and pass the hyphens option to the url package when it is loaded by
+% hyperref. This allows urls to have \n's in them, with the correct link being clicable on both
+% lines
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+
 % Indent the first line of the first paragraph like the first lines of subsequent paragraphs
 \usepackage{indentfirst}
 
-% Don't indent any first lines
-\setlength{\parindent}{0mm}
-
-% A little space between paragraphs
-\setlength{\parskip}{1.5mm}
+\setlength{\parindent}{0mm} % Don't indent any first lines
+\setlength{\parskip}{1.5mm} % A little space between paragraphs
 
 % Display
 % 1. <chapter title>
@@ -58,7 +59,6 @@
 \usepackage{inconsolata}
 \lstset{basicstyle=\small\ttfamily,breaklines=true}
 \usepackage[]{algorithm2e} % For pseudocode
-
 
 
 
@@ -147,12 +147,12 @@ display 2D images. The name "POV display", short for persistence of vision displ
 commonplace. Another popular name is "Propeller Clock" --- Propeller because it rotates like one,
 and clock because the round shape is ideal for displaying an analog clock.
 
-As far as I know, however, only two people have built a working version of a three-dimensional
-POV display so far (and have published it on the internet).\footnote{It turned out that there was
-a third one: When I posted a picture of my project on the internet, a reddit user told me about
-the display he built years before.}
-Neither of these is being produced on a grand scale, instead they are --- like most 2D versions
---- side projects of hobbyists or engineers.
+As far as I know, however, only two people have built a working version of a three-dimensional POV
+display so far (and have published it on the internet).\footnote{It turned out that there was a
+third one: When I posted a picture of my project on the internet, a reddit user told me about the
+display he built years before.} Neither of these is being produced on a grand scale, instead they
+are --- like most 2D versions --- side projects of hobbyists or engineers.
+% todo - link or reference in footnote
 
 \section{Goals}
 
@@ -232,12 +232,12 @@ image.
 \subsection{Control}
 
 For controlling the LEDs, I have bought a Teensy 3.1 microcontroller development board. It has a
-small footprint --- ideal for the fast rotation --- and still packs quite some power: The processor
-runs at 96 MHz at a register width of 32 bit. There are 34 configurable I/O pins.
+small footprint --- ideal for the fast rotation --- and still packs quite some power: The
+processor runs at 96 MHz at a register width of 32 bit. There are 34 configurable I/O pins.
 
-The controller has to have some kind of reference point, so that it can calculate the current speed
-and angular position of the device. For this, I used a simple hall sensor on the rotating side,
-which passes by a stationary magnet after each rotation.
+The controller has to have some kind of reference point, so that it can calculate the current
+speed and angular position of the device. For this, I used a simple hall sensor on the rotating
+side, which passes by a stationary magnet after each rotation.
 
 
 
@@ -262,7 +262,8 @@ necessary to set a relatively slow clock speed. The two \itwoc interfaces of the
 support clock speeds of up to 2.4 MHz --- and because \itwoc requires some overhead data to send
 out the slave's addresses, the actual data rate will be even lower.
 
-However, the minimum data rate required to control the LEDs at an 8-bit colour depth is as follows:
+However, the minimum data rate required to control the LEDs at an 8-bit colour depth is as
+follows:
 
 \begin{ownmath}
 % Yes it's a mess but \si makes it a unit, so it is not in cursive while still being small enough
@@ -270,9 +271,9 @@ However, the minimum data rate required to control the LEDs at an 8-bit colour d
 30\,\frac{\si{rotations}}{\si{second}} = \SI{11.52}{Mbps}
 \end{ownmath}
 
-This means that I'd need at least 5 parallel \itwoc lines to control all the LEDs with 8 bit colour
-depth. Because each Teensy only has two of them, I'd need three Teensy boards, which would be
-possible but very cumbersome.
+This means that I'd need at least 5 parallel \itwoc lines to control all the LEDs with 8 bit
+colour depth. Because each Teensy only has two of them, I'd need three Teensy boards, which would
+be possible but very cumbersome.
 
 \item Insufficient PWM frequency
 
@@ -320,8 +321,9 @@ lot of wasted board space. With the constant current drivers, however, I could u
 resistor to set the current for all 16 LEDs attached to one chip.
 
 Unlike most simple shift registers, the drivers' outputs are current sinks instead of current
-sources. This will be important when selecting the LEDs: In order to control each colour separately
-in an RGB LED, the cathodes have to be separated, while the anodes can be connected together.
+sources. This will be important when selecting the LEDs: In order to control each colour
+separately in an RGB LED, the cathodes have to be separated, while the anodes can be connected
+together.
 
 
 
@@ -372,13 +374,13 @@ driver has its own \SI{1}{\micro\farad}  ceramic capacitor.
 \subsection{Motor}
 
 In order for the whole device to rotate, I needed a motor. Luckily, I could salvage an appropriate
-part from an old RC motor boat. It's a big and heavy brushed motor. The fact that it has a built-in
-fan and was water-cooled in the boat leads me to think that its power output is much higher than
-what I need.
+part from an old RC motor boat. It's a big and heavy brushed motor. The fact that it has a
+built-in fan and was water-cooled in the boat leads me to think that its power output is much
+higher than what I need.
 
 Because of its high torque, I could attach the motor directly to the rotating shaft instead of
-using gears or a belt drive. That way there are less moving parts and the motor can turn at a lower
-rotational speed, both resulting in less wear and noise.
+using gears or a belt drive. That way there are less moving parts and the motor can turn at a
+lower rotational speed, both resulting in less wear and noise.
 
 
 
@@ -434,12 +436,12 @@ making the PCB layout.
 
 \subsection{LED Drivers}
 
-The LED drivers are arranged in a so-called daisy chain configuration, where the serial data output
-of each chip is connected to the serial data input of the next chip. This is not only the case
-within one board, but also between the different boards: The data output of one board is connected
-to the next board's input. That way, all of the 30 LED drivers can be controlled by a single SPI
-bus without anything like a chip select signal. To send data to the chips, the microcontroller
-can simply send out 480 bit without interruption.
+The LED drivers are arranged in a so-called daisy chain configuration, where the serial data
+output of each chip is connected to the serial data input of the next chip. This is not only the
+case within one board, but also between the different boards: The data output of one board is
+connected to the next board's input. That way, all of the 30 LED drivers can be controlled by a
+single SPI bus without anything like a chip select signal. To send data to the chips, the
+microcontroller can simply send out 480 bit without interruption.
 
 \def \iout {I\textsubscript{OUT}}
 \def \rext {R\textsubscript{EXT}}
@@ -495,14 +497,14 @@ green = vias, grey = silkscreen.}
 
 \subsection{General Remarks}
 
-The defining factor for the board layout was the pin layout of the LED drivers. The outputs are all
-at the bottom of the chip, while the data interface is at the top. This led me to the layout I have
-now: the LEDs are in a row at the bottom of the board where they can be directly connected to the
-driver outputs on the upper copper layer. The control lines are is routed on the back side of the
-board behind the chips, with vias going to the front side to connect to each chip. The data lines
-go straight from one chip to the next one on the upper copper layer, with the last output going
-back to the board's data interface on the back side. The resistors are placed on the right side of
-their respective driver IC, jumping across the data traces.
+The defining factor for the board layout was the pin layout of the LED drivers. The outputs are
+all at the bottom of the chip, while the data interface is at the top. This led me to the layout I
+have now: the LEDs are in a row at the bottom of the board where they can be directly connected to
+the driver outputs on the upper copper layer. The control lines are is routed on the back side of
+the board behind the chips, with vias going to the front side to connect to each chip. The data
+lines go straight from one chip to the next one on the upper copper layer, with the last output
+going back to the board's data interface on the back side. The resistors are placed on the right
+side of their respective driver IC, jumping across the data traces.
 
 The supply lines are placed beneath the row of LEDs. Had I placed the supply on the upper edge of
 the board, I still would've had to connect all the 16 anodes to \vdd. The driver chips, on the
@@ -536,7 +538,8 @@ layer was right beneath the driver chips.
 
 Initially, I had placed the decoupling capacitors right above the ICs. However, I could save a
 small bit of vertical board size by placing them at an offset to the right. That way I could push
-them down until where the pins begin, which is a bit further down than the edge of the chip itself.
+them down until where the pins begin, which is a bit further down than the edge of the chip
+itself.
 
 
 \subsection{Thermal Considerations}
@@ -604,17 +607,19 @@ wick away all the solder bridges. That way I could solder twelve pins within the
 
 
 
+
 \subsection {Testing and Debugging}
 
 With the boards finished, I wanted to know whether or not they work. In order to find out, I wrote
-a little program on the microcontroller to light the LEDs up in all possible colours consecutively.
-It did not work at the first try, so I used an oscilloscope to see if data was being sent at all.
-This was the case, the SPI library on the Teensy performed its task flawlessly.
+a little program on the microcontroller to light the LEDs up in all possible colours
+consecutively.  It did not work at the first try, so I used an oscilloscope to see if data was
+being sent at all.  This was the case, the SPI library on the Teensy performed its task
+flawlessly.
 
-It turned out that the culprit were the bad contacts. Instead of soldering the wires onto the board
-and the microcontroller, I simply inserted them into the respective holes. This caused the
-connection to have too much parasitic capacitance, and the signals (which were being sent at 4 MHz)
-did not have time to propagate up to their destination.
+It turned out that the culprit were the bad contacts. Instead of soldering the wires onto the
+board and the microcontroller, I simply inserted them into the respective holes. This caused the
+connection to have too much parasitic capacitance, and the signals (which were being sent at 4
+MHz) did not have time to propagate up to their destination.
 
 I soldered the cables on properly and sure enough, the board worked as intended. I repeated this
 procedure for all ten boards to see if they all worked as well as the first one, which wasn't the
@@ -654,9 +659,9 @@ by IGUS).
 
 \subsection{Slip Rings}
 
-In order to supply the rotating parts with electricity, I mounted a wooden disc right at the bottom
-of the shaft. On both sides of that disc I glued on a round piece of copper sheet, which I then
-connected to cables going up to where the electronics would later be.
+In order to supply the rotating parts with electricity, I mounted a wooden disc right at the
+bottom of the shaft. On both sides of that disc I glued on a round piece of copper sheet, which I
+then connected to cables going up to where the electronics would later be.
 
 On the stationary end, two long pieces of copper sheet serve as contacts. Because of their
 spring-like properties, they exert a certain amount of pressure on the rotating disc.
@@ -693,8 +698,8 @@ on the shaft. The diameter of this shaft is \SI{4}{\milli\meter}. In order to fi
 size, I drilled a few test holes on a spare board. A hole of \SI{4}{\milli\meter} was so small for
 the boards to fit on the shaft, while \SI{4.5}{\milli\meter} was obviously too big. After
 chamfering the top end of the shaft, the board with a \SI{4}{\milli\meter} hole just barely could
-slide on the shaft. This tight fit proved to be advantageous, because torque can now be transmitted
-reliably from the shaft to the boards, and they don't slide around.
+slide on the shaft. This tight fit proved to be advantageous, because torque can now be
+transmitted reliably from the shaft to the boards, and they don't slide around.
 
 There were two factors I had to carefully consider while arranging the boards:
 
@@ -797,8 +802,8 @@ the control variable. After the data has been sent, it then moves to the second 
 to the angle and incrementing the board counter, and feeds the second board with data too.
 
 After these two additions, the angle value will go over 99 in many cases, which is the highest
-possible array index. Since the pixel at position $100+n$ is the same as the one at position $n$, I
-can pervent causing undefined behaviour by applying a modulus 100 operator to the angle value
+possible array index. Since the pixel at position $100+n$ is the same as the one at position $n$,
+I can pervent causing undefined behaviour by applying a modulus 100 operator to the angle value
 before using it to access the array.
 
 
@@ -813,27 +818,27 @@ first pixel is displayed exactly at 0° instead of whereever the hall sensor det
 
 Whenever I started up the program, it started displaying the first pixel. It even did so when I
 connected the Teensy to my laptop via USB. This was dangerous because neither the Teensy nor the
-laptop's USB port can handle a lot of current, and if more than a handful of LEDs were switched on,
-the Teensy could've been damaged.
+laptop's USB port can handle a lot of current, and if more than a handful of LEDs were switched
+on, the Teensy could've been damaged.
 
 To fix this I added a boolean variable called \texttt{running}, which is set to \texttt{false} by
 default and only flipped when the magnet is first detected. That way the program only starts
 running if the display is actually rotating, at which point we can be sure that power is supplied
 through the slip rings rather than the USB port.
 
-The images displayed were constantly jittering around instead of staying still like they should. It
-took me a long time to find the source of this bug, but I managed to fix it in time for the swiss
-national competition organised by "Swiss Youth in Science".
+The images displayed were constantly jittering around instead of staying still like they should.
+It took me a long time to find the source of this bug, but I managed to fix it in time for the
+swiss national competition organised by "Swiss Youth in Science".
 
 The problem was that sometimes, the magnet was detected while \texttt{sendData} was still running.
 Because the hall sensor's interrupt had a higher priority than the timer interrupt I had used to
 send data, control was immediately given to the former. The \texttt{timerUpdate} function was
-executed normally, resetting \texttt{currentPixel} to zero and reading out the duration of the last
-rotation. However, after that, control was given bach to the \texttt{sendData} function. At the end
-of that function, \texttt{currentPixel} was incremented by one. That way, the \texttt{currentPixel}
-variable already had a value of one when it should've stayed at 0. For the entirety of the next
-rotation, \texttt{currentPixel} was off by one, resulting in the image quickly turning by
-\SI{3.6}{\degree}.
+executed normally, resetting \texttt{currentPixel} to zero and reading out the duration of the
+last rotation. However, after that, control was given bach to the \texttt{sendData} function. At
+the end of that function, \texttt{currentPixel} was incremented by one. That way, the
+\texttt{currentPixel} variable already had a value of one when it should've stayed at 0. For the
+entirety of the next rotation, \texttt{currentPixel} was off by one, resulting in the image
+quickly turning by \SI{3.6}{\degree}.
 
 
 \section{Image Creation}
@@ -842,7 +847,7 @@ Initially, all my images were made completely by hand. I had to enter the indivi
 program that would result in the desired image. Obviously this was a time-consuming and error
 prone task. In order to simplify the process of making an image, I wrote a python program that
 would support me in doing so. All of the source code is available on
-\texttt{github.com/mbjd/\_3DPOV} in the folder \texttt{image\_creation}.
+\url{https://github.com/mbjd/\_3DPOV} in the folder \texttt{image\_creation}.
 
 \subsection{Basics}
 
@@ -1110,6 +1115,28 @@ would make it difficult to run the latest and greatest games, 3D versions of cla
 Snake or a simple platform game would certainly be worth a shot.
 
 
+\section{Theoretical Limits}
+
+The current version of the display works fine and well, but it's certainly not at the limit of
+what can be done. In this section, I try to find out which aspects of the display can be improved
+how much. 
+
+\subsection{Resolution}
+
+The resolution was determined based upon the size of the LEDs I used. Pixels are located
+\SI{3.125}{\milli\meter} apart from each other, while the LEDs themselves have a width of about
+\SI{2.8}{\milli\meter}. In order to decrease pixel size significantly, I'd have to use smaller
+pixels. To a certain extent, this would be possible; there are LEDs that are about half the width
+of the ones I use currently.
+
+With such small LEDs, there wouln't be enough space for the LED drivers. I didn't find chips with
+similar functionality in a smaller package. To a certain extent it would be possible to minimise
+the necessary space between LED drivers by using a multi-layer board layout. This method might
+just be enough for twice the pixel density, but more won't be possible. Beyond that, custom-made
+LED drivers are the only solution I can think of.
+
+There's one more approach to increasing pixel density, which is to just have one colour per
+pixel.
 
 
 
@@ -1128,12 +1155,112 @@ Snake or a simple platform game would certainly be worth a shot.
 
 
 
+\begin{thebibliography}{99}
+
+\bibitem{povdisp}
+\emph{POV-Display}, project report, retrieved 2016-05-19,
+\newline \url{http://www.mikrocontroller.net/articles/POV-Display}
+
+\bibitem{attiny}
+\emph{ATtiny85 POV Display}, build instructions by vishalapr, retrieved 2016-05-19
+\newline \url{http://www.instructables.com/id/ATtiny8545-POV-Display/}
+
+\bibitem{propclock}
+\emph{Build an LED Propeller Clock}, build instructions by Bob Blick, retrieved 2016-05-19
+\newline \url{http://www.jameco.com/Jameco/workshop/MyStory/diy-led-propeller-clock.html}
+
+\bibitem{volumen}
+\emph{voLumen - volumetric 3D display device}, project report by Maximilian Mali, 
+retrieved 2016-05-19
+\newline \url{https://hackaday.io/project/1737}
+
+\bibitem{hotchkiss}
+\emph{3D POV Display... Work in Progress}, video by Jason Hotchkiss, retrieved 2016-05-19
+\newline \url{https://www.youtube.com/watch?v=rlptJzWwCXg}
+
+\bibitem{povwiki}
+\emph{Persistence of Vision} on Wikipedia, retrieved 2016-05-19
+\newline \url{https://en.wikipedia.org/wiki/Persistence\_of\_vision}
+
+% http://kiel.de/index.php?action=lexikon&tag=det&id=6114 would be here too but it's not availableanymore
+
+\bibitem{teensy}
+\emph{Teensy USB Development Board}, product page, retrieved 2016-05-19
+\newline \url{https://www.pjrc.com/teensy/}
+
+\bibitem{iiclib}
+\emph{New \itwoc Library for Teensy 3}, forum post by nox771, retrieved 2016-05-19
+\newline \url{https://forum.pjrc.com/threads/21680}
+
+\bibitem{iictut}
+\emph{\itwoc Tutorial}, article, retrieved 2016-05-19
+\newline \url{http://www.best-microcontroller-projects.com/i2c-tutorial.html}
+
+\bibitem{tlc}
+\emph{TLC5927}, product page, retrieved 2016-05-19
+\newline \url{http://www.ti.com/product/TLC5927}
+
+\bibitem{tlcdigikey}
+\emph{Texas-Instruments TLC5927IDBQR}, retrieved 2016-05-19
+\newline \url{http://www.digikey.ch/product-detail/en/TLC5927IDBQR/296-24762-1-ND/}
+
+\bibitem{eagle}
+\emph{What is EAGLE}, product page, retrieved 2016-05-19
+\newline \url{http://www.cadsoftusa.com/eagle-pcb-design-software/about-eagle/}
+
+\bibitem{oshpark}
+\emph{OSH Park --- An electric ecosystem}, retrieved 2016-05-19
+\newline \url{https://oshpark.com/}
+
+\bibitem{arduino}
+\emph{Download the Arduino Software}, retrieved 2016-05-19
+\newline \url{https://www.arduino.cc/en/main/software}
+
+\bibitem{teensyduino}
+\emph{Download Teensyduino}, retrieved 2016-05-19
+\newline \url{https://www.pjrc.com/teensy/td\_download.html}
+
+\bibitem{sublime}
+\emph{Sublime Text 2}, product page, retrieved 2016-05-19
+\newline \url{http://www.sublimetext.com/2}
+
+\bibitem{stino}
+\emph{Stino}, version control page by Robot-Will, retrieved 2016-05-19
+\newline \url{https://github.com/Robot-Will/Stino}
+
+\bibitem{intervaltimer}
+\emph{IntervalTimer}, documentation page by Paul Stoffregen, retrieved 2016-05-19
+\newline \url{https://www.pjrc.com/teensy/td\_timing\_IntervalTimer.html}
+
+\bibitem{attachinterrupt}
+\emph{attachInterrput()}, documentation page, retrieved 2016-05-19
+\newline \url{https://www.arduino.cc/en/Reference/attachInterrupt}
+
+\bibitem{kickstarter}
+Comment by Paul Stoffregen, retrieved 2016-05-19
+\newline
+\url{https://www.kickstarter.com/projects/paulstoffregen/teensy-30-32-bit-arm-cortex-m4-usable-in-arduino-a/comments?cursor=1654857}
+
+\bibitem{iopins}
+\emph{Using Digital I/O Pins}, documentation page, retrieved 2016-05-19
+\newline \url{https://www.pjrc.com/teensy/td\_digital.html}
+
+\bibitem{spilib}
+\emph{SPI Library}, documentation page, retrieved 2016-05-19
+\newline \url{https://www.pjrc.com/teensy/td\_libs\_SPI.html}
+
+\bibitem{pinout}
+\emph{Teensy 3.1 Pins}, retrieved 2016-05-19
+\newline \url{https://www.pjrc.com/teensy/pinout.html}
+
+\bibitem{phoneplug}
+\emph{Phone Connector (audio)} on Wikipedia, retrieved 2016-05-19
+\newline \url{https://en.wikipedia.org/wiki/Phone\_connector}
 
 
 
 
-
-
+\end{thebibliography}
 
 
 

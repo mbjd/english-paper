@@ -1,0 +1,55 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=2cm]{geometry}
+\linespread{1.5}
+\setlength{\parindent}{0mm}
+\setlength{\parskip}{2mm}
+
+\usepackage{siunitx}
+
+\pagenumbering{gobble}
+
+\begin{document}
+
+\hfill Balduin Dettling
+
+\vspace{1cm}
+\begin{center}
+
+    {\huge\bfseries Development of a 3D Display\vspace{-2mm}} 
+    \rule{0.67\textwidth}{1.5pt}
+
+    {\vspace{-2mm} \Large\bfseries Summary}
+
+\end{center}
+
+\section*{Goals}
+
+The aim of this project was to build a working prototype of a volumetric persistence of vision
+display.
+
+\section*{Methods}
+
+The display consists of a two-dimensional arrangement of LEDs that rotates at about
+\SI{60}{\hertz}. A microcontroller controls the LEDs such that they produce a volumetric image
+that can be viewed from any direction. Using a hall effect sensor and a magnet, the display
+measures its rotational speed and adjusts its timing accordingly, so that the image stays in place
+despite the rotational frequency slightly varying. 
+
+Because the rotational period is smaller than the flicker fusion threshold of the human eye, the
+image appears to be steady and the observer sees the whole image at all times, even though at any
+given time only $\frac{1}{100}$ of the pixels are illuminated.
+
+A python program makes it easy to insert simple geometric shapes or plots of a user-given function
+into an image, and it can convert the generated images to programs for the microcontroller that
+display the image.
+
+\section*{Conclusions}
+
+The initial goal has been reached and the display works as planned. Possible applications include
+advertising, education and video games. My display could be improved by incorporating wireless
+data transmission, so that images can be changed at runtime, or by replacing the loud and
+inefficient slip rings with inductive power transfer. Another worthwile addition would be a
+program that converts 3D models in a popular format to the format used by my display, which is
+nothing but a 3D bitmap.
+
+\end{document}

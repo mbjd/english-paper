@@ -379,7 +379,7 @@ driver has its own \SI{1}{\micro\farad}  ceramic capacitor.
 In order for the whole device to rotate, I needed a motor. Luckily, I could salvage an appropriate
 part from an old RC motor boat. It's a big and heavy brushed motor. The fact that it has a
 built-in fan and was water-cooled in the boat leads me to believe that it can take a lot more
-power than what I need for the display. 
+power than what I need for the display.
 
 Because of its high torque, I could attach the motor directly to the rotating shaft instead of
 using gears or a belt drive. That way there are less moving parts and the motor can turn at a
@@ -553,7 +553,7 @@ attached LEDs are turned on --- is as follows:
 
 \begin{ownmath}
 \textrm{P\textsubscript{MAX}} = (\SI{5}{\volt} - \textrm{V\textsubscript{F}}) \cdot
-\SI{20.6}{\milli\ampere\per output} \cdot \SI{16}{outputs} = \SI{780}{\milli\watt}
+\num{20.6} \frac{\si{\milli\ampere}}{{\text{output}}} \cdot \SI{16}{outputs} = \SI{780}{\milli\watt}
 \end{ownmath}
 
 V\textsubscript{F} is different depending on the colour of the LED, so I just used the average
@@ -788,7 +788,7 @@ To save the image on the microcontroller, I used a simple three-dimensional arra
 \cdot 10 \cdot 6$ bytes of data. The first index stands for the angle of a pixel in hundredths of
 a circle, the second index corresponds to the height and the third one describes the position of
 each byte on a row of LEDs. Because there are 48 LEDs per row, 6 bytes can be used to describe the
-row's state without wasting any storage space. 
+row's state without wasting any storage space.
 
 Because the PCBs are not right above each other, the data that is being sent out at the same time
 don't correspond to the pixels that are above each other in the image. In order avoid having to
@@ -1122,7 +1122,7 @@ Snake or a simple platform game would certainly be worth a shot.
 
 The current version of the display works fine and well, but it's certainly not at the limit of
 what can be done. In this section, I try to find out which aspects of the display can be improved
-how much. 
+how much.
 
 \subsection{Resolution}
 
@@ -1173,7 +1173,7 @@ pixel.
 \newline \url{http://www.jameco.com/Jameco/workshop/MyStory/diy-led-propeller-clock.html}
 
 \bibitem{volumen}
-\emph{voLumen - volumetric 3D display device}, project report by Maximilian Mali, 
+\emph{voLumen - volumetric 3D display device}, project report by Maximilian Mali,
 retrieved 2016-05-19
 \newline \url{https://hackaday.io/project/1737}
 

@@ -1,7 +1,7 @@
 ## english-paper
 
 This is the english version of my matura paper ([older german
-version](http://tiny.cc/3DPOV)). I maily made this translation for EUCYS
+version](http://tiny.cc/3DPOV)). I mainly made this translation for EUCYS
 2016, which I was invited for in the context of the national competition by
 Swiss Youth in Science ("Schweizer Jugend Forscht", there's no official
 english name. The literal translation would be "Swiss Youth Researches").

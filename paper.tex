@@ -221,7 +221,8 @@ image.
 \item Resolution of $16 \cdot 100 \cdot 10$ pixels (radius $\cdot$ circumference $\cdot$ height)
 \item Each pixel consists of an RGB LED
 \item Colour depth of 3 bit per pixel, or one bit per LED
-\item Rotational frequency of at least 30 Hz, or as fast as it needs to be in order to not flicker
+\item Rotational frequency of at least \SI{30}{\hertz}, or as fast as it needs to be in order
+	to not flicker
 
 \end{itemize}
 
@@ -234,8 +235,8 @@ image.
 
 For controlling the LEDs, I have bought a Teensy 3.1 microcontroller development board
 \cite{teensy}. It has a small footprint --- ideal for the fast rotation --- and still packs quite
-some power. The processor runs at 96 MHz at a register width of 32 bit, and there are 34
-configurable I/O pins.
+some power. The processor runs at \SI{96}{\mega\hertz} at a register width of 32 bit, and there
+are 34 configurable I/O pins.
 
 The controller has to have some kind of reference point, so that it can calculate the current
 speed and angular position of the device. For this, I used a simple hall sensor on the rotating
@@ -284,10 +285,10 @@ cycle, leading to a bit rate of \SI{48}{\mega\hertz}.
 If the colour depth is more than one bit, the LEDs will have to be dimmed using PWM. Normally, a
 rather low frequency of a few hundred to a few thousand Hz is sufficient as a PWM frequency, and
 most LED drivers modulate at frequencies within that range. In my case, however, the LEDs are
-moving into a new pixel 3000 times a second (assuming rotationat 30 Hz). This means that a PWM
+moving into a new pixel 3000 times a second (assuming rotation at 30 Hz). This means that a PWM
 frequency under 3000 Hz will involve losing information, and one slightly above 3000 Hz still
 won't look good. There would have to be a significant number of PWM cycles within each pixel,
-for example 10, which would require a PWM frequency of 30 KHz.
+for example 10, which would require a PWM frequency of \SI{30}{\kilo\hertz}.
 
 \end{itemize}
 
@@ -532,7 +533,7 @@ tried to make the boards as small as possible. Ultimately, I managed to bring th
 In order to achieve this, but also to avoid large gaps between the pixels, I placed the LEDs as
 close as possible to each other. The datasheet claims a width of \SI{2.8 \pm 0.2}{\milli\meter},
 so I decided to place the LEDs at \SI{3}{\milli\metre} increments. On a grid of \SI{12.5}{mil},
-the next larger distance is \SI{125}{mil}, which is equal to \SI{3.175}{mm}.
+the next larger distance is \SI{125}{mil}, which is equal to \SI{3.175}{\milli\metre}.
 
 The connections to the cathodes of the red LED needs to pass by the other two cathodes, since
 they're located on the lower side of the LED package. Because the LEDs are so close to each other,
@@ -621,8 +622,8 @@ flawlessly.
 
 It turned out that the culprit were the bad contacts. Instead of soldering the wires onto the
 board and the microcontroller, I simply inserted them into the respective holes. This caused the
-connection to have too much parasitic capacitance, and the signals (which were being sent at 4
-MHz) did not have time to propagate up to their destination.
+connection to have too much parasitic capacitance, and the signals (which were being sent at
+\SI{4}{\mega\hertz}) did not have time to propagate up to their destination.
 
 I soldered the cables on properly and sure enough, the board worked as intended. I repeated this
 procedure for all ten boards to see if they all worked as well as the first one, which wasn't the
